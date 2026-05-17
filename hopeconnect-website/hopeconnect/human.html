@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Human Help — HopeConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#C9952A;--gold-l:#F0CC80;--deep:#0A1628;--deep2:#112240;
+  --cream:#FBF8F3;--white:#fff;--gray:#6B7280;--border:#E5E0D8;
+  --H:#1B4FBF;--Hl:#3B72E8;--Hp:#EEF3FF;--Hd:#0D2E8A;
+  --danger:#C0392B;--success:#0D7A55;--warn:#E67E22;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--deep);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,22,40,0.97);backdrop-filter:blur(16px);height:68px;display:flex;align-items:center;padding:0 6%;justify-content:space-between;border-bottom:1px solid rgba(201,149,42,0.25)}
+.logo{font-family:'Fraunces',serif;color:#C9952A;font-size:1.4rem;font-weight:900;text-decoration:none}
+.logo span{color:#fff;font-weight:400}
+.nav-links{display:flex;gap:1.6rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.875rem;font-weight:500;transition:color 0.2s}
+.nav-links a:hover,.nav-links a.active{color:#C9952A}
+.nav-pill{background:#C9952A;color:var(--deep)!important;padding:7px 16px;border-radius:50px;font-weight:600!important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px}
+
+/* PAGE HERO */
+.page-hero{background:linear-gradient(135deg,#0D1F4A 0%,#162B6A 60%,#0D2E8A 100%);padding:120px 6% 60px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 80% 50%,rgba(59,114,232,0.2) 0%,transparent 70%)}
+.ph-inner{position:relative;z-index:2;max-width:700px}
+.ph-tag{display:inline-block;background:rgba(59,114,232,0.25);border:1px solid rgba(59,114,232,0.4);color:#A8C4FF;padding:5px 14px;border-radius:50px;font-size:0.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.ph-inner h1{font-family:'Fraunces',serif;color:#fff;font-size:clamp(2.2rem,4vw,3.5rem);font-weight:900;margin-bottom:0.75rem;line-height:1.1}
+.ph-inner p{color:rgba(255,255,255,0.6);font-size:1rem;line-height:1.7;max-width:500px}
+
+/* TABS */
+.tabs-bar{background:#fff;border-bottom:2px solid var(--border);padding:0 6%;display:flex;gap:0;overflow-x:auto;position:sticky;top:68px;z-index:100;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab{padding:16px 20px;font-size:0.875rem;font-weight:500;color:var(--gray);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none;font-family:'Outfit',sans-serif}
+.tab:hover{color:var(--H)}
+.tab.active{color:var(--H);border-bottom-color:var(--H);font-weight:600}
+
+/* MAIN */
+main{max-width:1200px;margin:0 auto;padding:2.5rem 6%}
+.section-panel{display:none}
+.section-panel.active{display:block}
+
+/* FORM CARD */
+.form-card{background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;margin-bottom:2rem}
+.fc-head{padding:1.5rem 1.8rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.fc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+.fci-blue{background:var(--Hp)}
+.fci-purple{background:#F0EEFF}
+.fci-coral{background:#FFF0EC}
+.fci-green{background:#EAF7F2}
+.fci-amber{background:#FFF8EC}
+.fc-head-text h3{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700}
+.fc-head-text p{font-size:0.82rem;color:var(--gray);margin-top:2px}
+.fc-body{padding:1.8rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:0.8rem;font-weight:600;color:var(--deep);letter-spacing:0.3px}
+.form-group input,.form-group select,.form-group textarea{padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Outfit',sans-serif;font-size:0.9rem;color:var(--deep);outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:#fff}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--H);box-shadow:0 0 0 3px rgba(27,79,191,0.1)}
+.form-group textarea{resize:vertical;min-height:90px;line-height:1.5}
+.submit-row{display:flex;align-items:center;gap:1rem;margin-top:0.5rem;flex-wrap:wrap}
+.btn{padding:11px 24px;border-radius:50px;font-weight:600;font-size:0.9rem;cursor:pointer;border:none;transition:all 0.25s;font-family:'Outfit',sans-serif;display:inline-flex;align-items:center;gap:7px}
+.btn-human{background:var(--H);color:#fff}
+.btn-human:hover{background:var(--Hd);transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--gray)}
+.btn-outline:hover{border-color:var(--H);color:var(--H)}
+.btn-sm{padding:7px 16px;font-size:0.8rem}
+.btn-danger{background:#FEE8E8;color:var(--danger);border:none}
+.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-success{background:#E8F7F2;color:var(--success);border:none}
+.btn-success:hover{background:var(--success);color:#fff}
+
+/* LISTINGS */
+.listings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem}
+.listings-head h3{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700}
+.search-bar{display:flex;gap:8px;align-items:center}
+.search-bar input{padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;font-family:'Outfit',sans-serif;font-size:0.85rem;outline:none;width:220px}
+.search-bar input:focus{border-color:var(--H)}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}
+.pill{padding:5px 14px;border-radius:50px;font-size:0.78rem;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--gray);transition:all 0.2s}
+.pill.active,.pill:hover{background:var(--H);color:#fff;border-color:var(--H)}
+.pill.active-animal,.pill:hover.pill-animal{background:var(--success);color:#fff;border-color:var(--success)}
+
+/* CARDS GRID */
+.cards-list{display:flex;flex-direction:column;gap:0.8rem}
+.listing-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:1.2rem 1.4rem;display:flex;align-items:flex-start;gap:1rem;transition:box-shadow 0.2s}
+.listing-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+.lc-badge{flex-shrink:0;padding:4px 12px;border-radius:50px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.badge-lost{background:#FEE8E8;color:#A32D2D}
+.badge-found{background:#E8F7F2;color:#0D7A55}
+.badge-pending{background:#FFF3E0;color:#E65100}
+.badge-resolved{background:#E8F7F2;color:#0D7A55}
+.badge-open{background:#EEF3FF;color:var(--H)}
+.lc-content{flex:1;min-width:0}
+.lc-title{font-weight:600;font-size:0.95rem;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lc-meta{font-size:0.8rem;color:var(--gray);display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.lc-meta span{display:flex;align-items:center;gap:4px}
+.lc-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.empty-state{text-align:center;padding:3rem;color:var(--gray)}
+.empty-state .es-icon{font-size:3rem;margin-bottom:0.75rem;opacity:0.4}
+.empty-state p{font-size:0.9rem}
+
+/* NGO CARDS */
+.ngo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.ngo-card{background:#fff;border-radius:14px;border:1px solid var(--border);padding:1.4rem;transition:all 0.2s}
+.ngo-card:hover{box-shadow:0 6px 20px rgba(0,0,0,0.08);transform:translateY(-2px)}
+.ngo-icon{font-size:2rem;margin-bottom:0.75rem;display:block}
+.ngo-name{font-weight:700;font-size:1rem;margin-bottom:4px}
+.ngo-type{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;padding:3px 10px;border-radius:50px;display:inline-block;margin-bottom:0.6rem}
+.ngo-desc{font-size:0.82rem;color:var(--gray);line-height:1.6;margin-bottom:0.75rem}
+.ngo-meta{font-size:0.78rem;color:var(--gray);display:flex;flex-direction:column;gap:3px;margin-bottom:0.75rem}
+
+/* QUERY BOARD */
+.query-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:1.2rem 1.4rem;margin-bottom:0.8rem}
+.qc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.6rem}
+.qc-title{font-weight:600;font-size:0.95rem}
+.qc-meta{font-size:0.78rem;color:var(--gray);display:flex;gap:12px;margin-bottom:0.5rem}
+.qc-body{font-size:0.88rem;color:var(--gray);line-height:1.6}
+.qc-answer{background:var(--Hp);border-radius:8px;padding:10px 14px;font-size:0.85rem;margin-top:0.75rem;border-left:3px solid var(--H)}
+.qc-answer-label{font-size:0.72rem;font-weight:700;color:var(--H);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+
+/* ALERT BANNER */
+.alert-banner{padding:12px 16px;border-radius:10px;margin-bottom:1rem;font-size:0.875rem;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.alert-info{background:var(--Hp);border:1px solid rgba(27,79,191,0.2);color:#1B4FBF}
+.alert-warn{background:#FFF3E0;border:1px solid rgba(230,126,34,0.3);color:#E65100}
+.alert-success{background:#E8F7F2;border:1px solid rgba(13,122,85,0.25);color:#0D7A55}
+
+/* COMMUNITY BOARD */
+.comm-card{background:#fff;border-radius:12px;border:1px solid var(--border);padding:1.2rem 1.4rem;margin-bottom:0.8rem;display:flex;gap:1rem;align-items:flex-start}
+.cc-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;flex-shrink:0;font-family:'Fraunces',serif}
+.cc-info{flex:1}
+.cc-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap}
+.cc-name{font-weight:600;font-size:0.9rem}
+.cc-type{font-size:0.72rem;padding:2px 10px;border-radius:50px;font-weight:600}
+.type-offer{background:#EAF7F2;color:#0D7A55}
+.type-need{background:var(--Hp);color:var(--H)}
+.cc-desc{font-size:0.85rem;color:var(--gray);line-height:1.6}
+.cc-footer{display:flex;align-items:center;gap:12px;margin-top:6px;font-size:0.78rem;color:var(--gray)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(5,12,25,0.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity 0.3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative;transform:translateY(30px) scale(0.97);transition:all 0.35s cubic-bezier(.175,.885,.32,1.1)}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-head{padding:1.6rem 1.8rem 0;display:flex;justify-content:space-between;align-items:flex-start}
+.modal-head h3{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700}
+.modal-close{background:var(--border);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s}
+.modal-close:hover{background:#ccc}
+.modal-body{padding:1rem 1.8rem 1.8rem}
+.modal-sub{font-size:0.82rem;color:var(--gray);margin-bottom:1.2rem}
+.success-anim{display:none;text-align:center;padding:2rem}
+.success-anim.show{display:block}
+.success-anim .big-tick{font-size:4rem;margin-bottom:0.75rem}
+.success-anim h4{font-family:'Fraunces',serif;font-size:1.3rem;margin-bottom:0.5rem}
+.success-anim p{color:var(--gray);font-size:0.9rem;line-height:1.6}
+
+/* NOTIF */
+.notif{position:fixed;bottom:24px;right:24px;background:var(--deep);color:#fff;padding:13px 18px;border-radius:12px;font-size:0.88rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.4s cubic-bezier(.175,.885,.32,1.275);border-left:4px solid var(--gold);max-width:340px;box-shadow:0 12px 40px rgba(0,0,0,0.35);line-height:1.5}
+.notif.show{transform:translateY(0);opacity:1}
+
+@media(max-width:768px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:auto}
+  .ngo-grid{grid-template-columns:1fr}
+  .lc-actions{flex-direction:column}
+  nav .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:rgba(10,22,40,0.98);flex-direction:column;padding:1.5rem;gap:1rem}
+  nav .nav-links.open{display:flex}
+  .hamburger{display:flex}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Hope<span>Connect</span></a>
+  <ul class="nav-links" id="navlinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/human" class="active">Human Help</a></li>
+    <li><a href="/animal">Animal Help</a></li>
+    <li><a href="/human#lostfound">Lost & Found</a></li>
+    <li><a href="/#volunteer" class="nav-pill">Volunteer</a></li>
+  </ul>
+  <div class="hamburger" onclick="document.getElementById('navlinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="ph-inner">
+    <div class="ph-tag">Human Help</div>
+    <h1>Support for<br>Every Person</h1>
+    <p>From specially-abled individuals to those facing homelessness — we connect every person to the right resource, right when they need it.</p>
+  </div>
+</div>
+
+<div class="tabs-bar" id="tabsbar">
+  <button class="tab active" onclick="showTab('abled',this)">♿ Specially Abled</button>
+  <button class="tab" onclick="showTab('homeless',this)">🏠 Homeless</button>
+  <button class="tab" id="lf-tab" onclick="showTab('lostfound',this)">🔍 Lost & Found</button>
+  <button class="tab" onclick="showTab('ngo',this)">🏛️ NGOs & Care</button>
+  <button class="tab" onclick="showTab('infoDesk',this)">ℹ️ Info Desk</button>
+  <button class="tab" onclick="showTab('community',this)">🤲 Community</button>
+</div>
+
+<main>
+
+<!-- ======== SPECIALLY ABLED ======== -->
+<div class="section-panel active" id="panel-abled">
+  <div class="alert-banner alert-info">
+    ℹ️ All requests are reviewed by trained volunteers. Response time: <strong>1–3 hours</strong> for standard, <strong>under 30 minutes</strong> for urgent.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-blue">♿</div>
+      <div class="fc-head-text">
+        <h3>Request Disability Support</h3>
+        <p>For blind, deaf, non-verbal, physically handicapped & specially-abled individuals</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="abled-form" onsubmit="submitAbled(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input type="text" required placeholder="Your full name" id="a-name"/></div>
+          <div class="form-group"><label>Phone Number *</label><input type="tel" required placeholder="10-digit number" id="a-phone" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Type of Disability</label>
+            <select id="a-type">
+              <option value="">Select type</option>
+              <option>Visually Impaired (Blind / Low Vision)</option>
+              <option>Hearing Impaired (Deaf)</option>
+              <option>Non-verbal / Speech Impaired</option>
+              <option>Physically Handicapped</option>
+              <option>Multiple Disabilities</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Support Needed</label>
+            <select id="a-support">
+              <option value="">Select support type</option>
+              <option>Guide Volunteer</option>
+              <option>Sign Language Interpreter</option>
+              <option>Wheelchair / Mobility Aid</option>
+              <option>Transport Assistance</option>
+              <option>Assistive Device (Cane, Hearing Aid)</option>
+              <option>Escort to Hospital/Office</option>
+              <option>Home Visit</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your City / Area *</label><input type="text" required placeholder="e.g. Ranchi, Jharkhand" id="a-city"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="a-urgency">
+              <option>Normal (within today)</option>
+              <option>Urgent (within 1-2 hours)</option>
+              <option>Emergency (immediate)</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Additional Details</label><textarea placeholder="Describe your specific need in detail..." id="a-details"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Request →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">We'll call you within 2 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Submitted Requests -->
+  <div class="listings-head">
+    <h3>My Support Requests</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadAbled()">🔄 Refresh</button>
+  </div>
+  <div id="abled-list" class="cards-list"></div>
+</div>
+
+<!-- ======== HOMELESS ======== -->
+<div class="section-panel" id="panel-homeless">
+  <div class="alert-banner alert-warn">
+    🏠 If you see someone in immediate danger, call <strong>112</strong>. For shelter referrals, fill the form below.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-coral">🏠</div>
+      <div class="fc-head-text">
+        <h3>Find Shelter & Support</h3>
+        <p>Shelter connections, meals, hygiene kits & rehabilitation for homeless individuals and families</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="homeless-form" onsubmit="submitHomeless(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Name (Optional)</label><input type="text" placeholder="Anonymous is okay" id="h-name"/></div>
+          <div class="form-group"><label>Phone (Optional)</label><input type="tel" placeholder="For callback" id="h-phone"/></div>
+          <div class="form-group"><label>Current Location *</label><input type="text" required placeholder="Landmark, area, city" id="h-location"/></div>
+          <div class="form-group"><label>Number of People</label>
+            <select id="h-count">
+              <option>Just me (1 person)</option>
+              <option>2 people</option>
+              <option>Small family (3–4)</option>
+              <option>Family with children</option>
+              <option>Group (5 or more)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Immediate Need</label>
+            <select id="h-need">
+              <option>Shelter for tonight</option>
+              <option>Food & drinking water</option>
+              <option>Medical attention</option>
+              <option>Clothing / blanket</option>
+              <option>All of the above</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Duration Homeless</label>
+            <select id="h-duration">
+              <option>Since today</option>
+              <option>A few days</option>
+              <option>1–4 weeks</option>
+              <option>1–6 months</option>
+              <option>More than 6 months</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Situation Details (Optional)</label><textarea placeholder="Tell us more so we can find the best shelter for you..." id="h-details"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Find Nearest Shelter →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Nearest shelter shown immediately</span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="homeless-result"></div>
+
+  <div class="listings-head" style="margin-top:1.5rem">
+    <h3>Reported Homeless Cases</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadHomeless()">🔄 Refresh</button>
+  </div>
+  <div id="homeless-list" class="cards-list"></div>
+</div>
+
+<!-- ======== LOST & FOUND ======== -->
+<div id="lostfound"></div>
+<div class="section-panel" id="panel-lostfound">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-purple">🔍</div>
+      <div class="fc-head-text">
+        <h3>Report Lost or Found</h3>
+        <p>Missing person, found individual, lost object, or found belongings</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="lf-form" onsubmit="submitLF(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Report Type *</label>
+            <select id="lf-type" required>
+              <option value="">Select type</option>
+              <option value="lost-person">Lost Person (Missing)</option>
+              <option value="found-person">Found a Person</option>
+              <option value="lost-object">Lost Object / Belonging</option>
+              <option value="found-object">Found an Object</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your Name *</label><input type="text" required id="lf-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Your Phone *</label><input type="tel" required id="lf-phone" placeholder="Contact number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Description *</label><input type="text" required id="lf-desc" placeholder="Person: age, clothing, appearance / Object: item name, color"/></div>
+          <div class="form-group"><label>Location *</label><input type="text" required id="lf-loc" placeholder="Last seen / found location"/></div>
+          <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="lf-time"/></div>
+          <div class="form-group full"><label>Additional Details</label><textarea placeholder="Any other identifying information, circumstances, photos description..." id="lf-extra"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Report →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>All Lost & Found Reports</h3>
+    <div class="search-bar">
+      <input type="text" id="lf-search" placeholder="Search reports..." oninput="filterLF()"/>
+    </div>
+  </div>
+  <div class="filter-pills" id="lf-filters">
+    <span class="pill active" onclick="setLFFilter('all',this)">All</span>
+    <span class="pill" onclick="setLFFilter('lost-person',this)">Lost Person</span>
+    <span class="pill" onclick="setLFFilter('found-person',this)">Found Person</span>
+    <span class="pill" onclick="setLFFilter('lost-object',this)">Lost Object</span>
+    <span class="pill" onclick="setLFFilter('found-object',this)">Found Object</span>
+  </div>
+  <div id="lf-list" class="cards-list"></div>
+</div>
+
+<!-- ======== NGOs & CARE ======== -->
+<div class="section-panel" id="panel-ngo">
+  <div class="alert-banner alert-info">
+    🏛️ Found someone who needs institutional care? Use the form below to refer them.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-blue">📋</div>
+      <div class="fc-head-text">
+        <h3>Refer a Person to Care</h3>
+        <p>Connect vulnerable individuals to NGOs, orphanages, old age homes, mental hospitals</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="ngo-form" onsubmit="submitNGO(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="ng-name" placeholder="Reporting person"/></div>
+          <div class="form-group"><label>Your Phone *</label><input required type="tel" id="ng-phone" placeholder="Contact" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Who Needs Help *</label>
+            <select required id="ng-who">
+              <option value="">Select</option>
+              <option>Child / Orphan</option>
+              <option>Elderly Person</option>
+              <option>Person with Mental Health Issue</option>
+              <option>Differently-abled Adult</option>
+              <option>Abandoned / Vulnerable Woman</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Best Suited Institution</label>
+            <select id="ng-inst">
+              <option>NGO (General)</option>
+              <option>Orphanage / Child Care</option>
+              <option>Old Age Home</option>
+              <option>Mental Health Hospital</option>
+              <option>Rehabilitation Centre</option>
+              <option>Police Station (immediate safety)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Person's Location *</label><input required type="text" id="ng-loc" placeholder="Where is this person now?"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="ng-urgency">
+              <option>Normal</option>
+              <option>Urgent</option>
+              <option>Emergency — immediate danger</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Description *</label><textarea required id="ng-desc" placeholder="Physical description, situation, any known history..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Referral →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head" style="margin-top:1.5rem">
+    <h3>Partner NGOs & Institutions</h3>
+    <div class="search-bar">
+      <input type="text" id="ngo-search" placeholder="Search NGOs..." oninput="filterNGOs()"/>
+    </div>
+  </div>
+  <div class="filter-pills">
+    <span class="pill active" onclick="filterNGOType('all',this)">All</span>
+    <span class="pill" onclick="filterNGOType('orphanage',this)">Orphanage</span>
+    <span class="pill" onclick="filterNGOType('oldage',this)">Old Age Home</span>
+    <span class="pill" onclick="filterNGOType('mental',this)">Mental Health</span>
+    <span class="pill" onclick="filterNGOType('rehab',this)">Rehab Centre</span>
+    <span class="pill" onclick="filterNGOType('general',this)">General NGO</span>
+  </div>
+  <div id="ngo-directory" class="ngo-grid"></div>
+</div>
+
+<!-- ======== INFO DESK ======== -->
+<div class="section-panel" id="panel-infoDesk">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-amber">ℹ️</div>
+      <div class="fc-head-text">
+        <h3>Ask the Community</h3>
+        <p>Post questions about government schemes, welfare, legal aid, medical help, education</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="query-form" onsubmit="submitQuery(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="q-name" placeholder="Full name"/></div>
+          <div class="form-group"><label>Phone / Email *</label><input required type="text" id="q-contact" placeholder="For reply"/></div>
+          <div class="form-group"><label>Category</label>
+            <select id="q-cat">
+              <option>Government Schemes</option>
+              <option>Welfare & Subsidies</option>
+              <option>Legal Aid</option>
+              <option>Medical Help</option>
+              <option>Education & Scholarships</option>
+              <option>Employment & Jobs</option>
+              <option>Housing & Land</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>City / State</label><input type="text" id="q-city" placeholder="Your location"/></div>
+          <div class="form-group full"><label>Your Question *</label><textarea required id="q-question" placeholder="Be as specific as possible — what exactly do you need help with?"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Post Question →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Answered within 24 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Questions & Answers Board</h3>
+    <div class="search-bar">
+      <input type="text" id="q-search" placeholder="Search questions..." oninput="filterQueries()"/>
+    </div>
+  </div>
+  <div id="query-list"></div>
+</div>
+
+<!-- ======== COMMUNITY ======== -->
+<div class="section-panel" id="panel-community">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-green">🤲</div>
+      <div class="fc-head-text">
+        <h3>Community Help Board</h3>
+        <p>Offer help or request support from people in your area</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="comm-form" onsubmit="submitComm(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>I want to... *</label>
+            <select required id="cm-intent">
+              <option value="offer">Offer Help to Someone</option>
+              <option value="need">Request Help from Community</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="cm-name" placeholder="Your name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="cm-phone" placeholder="Contact number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Type of Help</label>
+            <select id="cm-type">
+              <option>Give a ride / transport</option>
+              <option>Share food / groceries</option>
+              <option>Help with errands</option>
+              <option>Share skills (teaching, plumbing, etc.)</option>
+              <option>Donate items / clothing</option>
+              <option>Emotional / mental support</option>
+              <option>Medical accompaniment</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your Area / City *</label><input required type="text" id="cm-area" placeholder="Locality, city"/></div>
+          <div class="form-group"><label>Availability</label><input type="text" id="cm-avail" placeholder="e.g. Weekends, Evenings, Anytime"/></div>
+          <div class="form-group full"><label>Details *</label><textarea required id="cm-details" placeholder="Describe what you can offer or what you need..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Post to Community →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Community Board</h3>
+    <div style="display:flex;gap:8px">
+      <span class="pill active" onclick="setCFilter('all',this)">All</span>
+      <span class="pill" onclick="setCFilter('offer',this)">Offering Help</span>
+      <span class="pill" onclick="setCFilter('need',this)">Needs Help</span>
+    </div>
+  </div>
+  <div id="comm-list"></div>
+</div>
+
+</main>
+
+<!-- NOTIF -->
+<div class="notif" id="notif"></div>
+
+<script>
+// ===== UTILITY =====
+const $ = id => document.getElementById(id);
+const getVal = id => ($(id)||{}).value || '';
+
+function showNotif(msg, color){
+  const n = $('notif');
+  n.innerHTML = msg;
+  n.style.borderLeftColor = color || 'var(--gold)';
+  n.classList.add('show');
+  clearTimeout(n._t);
+  n._t = setTimeout(() => n.classList.remove('show'), 4500);
+}
+
+function showTab(name, btn){
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  $('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top: document.querySelector('.tabs-bar').offsetTop - 68, behavior:'smooth'});
+  if(name === 'lostfound') loadLF();
+  if(name === 'ngo') { loadNGO(); renderNGODirectory(); }
+  if(name === 'infoDesk') loadQueries();
+  if(name === 'community') loadComm();
+  if(name === 'homeless') loadHomeless();
+  if(name === 'abled') loadAbled();
+}
+
+// ===== STORAGE =====
+function getStore(key){ try{ return JSON.parse(localStorage.getItem('hc_'+key)||'[]'); } catch(e){return [];} }
+function setStore(key, data){ localStorage.setItem('hc_'+key, JSON.stringify(data)); }
+function addToStore(key, item){ const d=getStore(key); d.unshift(item); setStore(key, d); }
+
+function fmtTime(ts){
+  const d = new Date(ts), now = new Date();
+  const diff = (now - d)/1000;
+  if(diff < 60) return 'just now';
+  if(diff < 3600) return Math.floor(diff/60) + ' min ago';
+  if(diff < 86400) return Math.floor(diff/3600) + ' hr ago';
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+}
+
+// ===== SPECIALLY ABLED =====
+function submitAbled(e){
+  e.preventDefault();
+  const name=getVal('a-name'), phone=getVal('a-phone'), city=getVal('a-city');
+  if(!name||!phone||!city){ showNotif('⚠️ Please fill all required fields.','#E67E22'); return; }
+  const entry = {
+    id: Date.now(), name, phone,
+    type: getVal('a-type') || 'Not specified',
+    support: getVal('a-support') || 'Not specified',
+    city, urgency: getVal('a-urgency'),
+    details: getVal('a-details'),
+    status: 'Pending', ts: Date.now()
+  };
+  addToStore('abled', entry);
+  $('abled-form').reset();
+  loadAbled();
+  showNotif('✅ Request submitted! A volunteer will call you at <strong>'+phone+'</strong> within 2 hours.','#0D7A55');
+}
+
+function loadAbled(){
+  const data = getStore('abled');
+  const list = $('abled-list');
+  if(!data.length){ list.innerHTML = '<div class="empty-state"><div class="es-icon">♿</div><p>No requests yet. Submit a request above.</p></div>'; return; }
+  list.innerHTML = data.map(r => `
+    <div class="listing-card">
+      <div class="lc-badge badge-${r.status==='Resolved'?'resolved':'pending'}">${r.status}</div>
+      <div class="lc-content">
+        <div class="lc-title">${r.name} — ${r.type}</div>
+        <div class="lc-meta">
+          <span>📞 ${r.phone}</span><span>📍 ${r.city}</span><span>🎯 ${r.support}</span><span>⏰ ${r.urgency}</span><span>🕐 ${fmtTime(r.ts)}</span>
+        </div>
+        ${r.details?`<div style="font-size:0.82rem;color:var(--gray);margin-top:6px">${r.details}</div>`:''}
+      </div>
+      <div class="lc-actions">
+        ${r.status==='Pending'?`<button class="btn btn-success btn-sm" onclick="markStatus('abled',${r.id},'Resolved')">✓ Resolved</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('abled',${r.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+// ===== HOMELESS =====
+const SHELTERS = [
+  {name:'Seva Sadan Night Shelter', dist:'0.8 km', beds:'42/60', phone:'0651-234567', area:'Ranchi'},
+  {name:'Asha Niketan Homeless Home', dist:'1.5 km', beds:'28/40', phone:'0651-345678', area:'Ranchi'},
+  {name:'Jan Kalyan Shelter', dist:'2.2 km', beds:'15/50', phone:'0651-456789', area:'Ranchi'},
+];
+
+function submitHomeless(e){
+  e.preventDefault();
+  const loc = getVal('h-location');
+  if(!loc){ showNotif('⚠️ Please enter your current location.','#E67E22'); return; }
+  const entry = {
+    id: Date.now(), name: getVal('h-name')||'Anonymous',
+    phone: getVal('h-phone')||'Not provided',
+    location: loc, count: getVal('h-count'),
+    need: getVal('h-need'), duration: getVal('h-duration'),
+    details: getVal('h-details'), status:'Active', ts: Date.now()
+  };
+  addToStore('homeless', entry);
+  $('homeless-form').reset();
+  // show nearest shelters
+  const hr = $('homeless-result');
+  hr.innerHTML = `
+    <div class="alert-banner alert-success">✅ We found <strong>${SHELTERS.length} shelters</strong> near your location. A volunteer will guide you!</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-bottom:1.5rem">
+      ${SHELTERS.map(s=>`
+        <div style="background:#fff;border-radius:12px;border:1px solid var(--border);padding:1.2rem">
+          <div style="font-weight:700;font-size:1rem;margin-bottom:4px">🏠 ${s.name}</div>
+          <div style="font-size:0.82rem;color:var(--gray)">📍 ${s.dist} away — ${s.area}</div>
+          <div style="font-size:0.82rem;color:var(--gray);margin:4px 0">🛏 Available beds: ${s.beds}</div>
+          <a href="tel:${s.phone}" style="display:block;margin-top:0.75rem;padding:7px 16px;background:var(--Hp);color:var(--H);border-radius:50px;font-size:0.82rem;font-weight:600;text-align:center;text-decoration:none">📞 Call ${s.phone}</a>
+        </div>`).join('')}
+    </div>`;
+  loadHomeless();
+  showNotif('🏠 Nearest shelters found! Volunteer will guide you.','#0D7A55');
+}
+
+function loadHomeless(){
+  const data = getStore('homeless');
+  const list = $('homeless-list');
+  if(!data.length){ list.innerHTML='<div class="empty-state"><div class="es-icon">🏠</div><p>No reports yet.</p></div>'; return; }
+  list.innerHTML = data.map(r=>`
+    <div class="listing-card">
+      <div class="lc-badge badge-${r.status==='Resolved'?'resolved':'pending'}">${r.status}</div>
+      <div class="lc-content">
+        <div class="lc-title">${r.name} — ${r.need}</div>
+        <div class="lc-meta"><span>📍 ${r.location}</span><span>👥 ${r.count}</span><span>📅 ${r.duration}</span><span>🕐 ${fmtTime(r.ts)}</span></div>
+        ${r.details?`<div style="font-size:0.82rem;color:var(--gray);margin-top:5px">${r.details}</div>`:''}
+      </div>
+      <div class="lc-actions">
+        ${r.status!=='Resolved'?`<button class="btn btn-success btn-sm" onclick="markStatus('homeless',${r.id},'Resolved')">✓ Resolved</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('homeless',${r.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+// ===== LOST & FOUND =====
+let lfFilter = 'all';
+
+// Seed some default entries if empty
+function seedLF(){
+  if(getStore('lf').length) return;
+  const seeds = [
+    {id:1, type:'lost-person', name:'Ramesh Kumar', phone:'9876543210', desc:'Elderly man ~70 yrs, white kurta, confused', loc:'Railway Station, Platform 2', time:'', extra:'Has hearing problem', status:'Open', ts: Date.now()-7200000},
+    {id:2, type:'found-object', name:'Priya Sharma', phone:'9876500001', desc:'Blue backpack with books and laptop', loc:'City Bus Stop #14, MG Road', time:'', extra:'Handed to security guard', status:'Open', ts: Date.now()-18000000},
+    {id:3, type:'lost-person', name:'Sanjana Singh', phone:'9876511111', desc:'Girl, ~8 years, pink frock, speaks Hindi', loc:'Central Market', time:'', extra:'Answers to Riya', status:'Resolved', ts: Date.now()-3600000},
+    {id:4, type:'found-object', name:'Arjun Mehta', phone:'9876522222', desc:'Aadhaar card — Suresh Kumar', loc:'Post Office, MG Road', time:'', extra:'', status:'Open', ts: Date.now()-86400000},
+  ];
+  setStore('lf', seeds);
+}
+
+function submitLF(e){
+  e.preventDefault();
+  const type=getVal('lf-type'), name=getVal('lf-name'), phone=getVal('lf-phone'), desc=getVal('lf-desc'), loc=getVal('lf-loc');
+  if(!type||!name||!phone||!desc||!loc){ showNotif('⚠️ Fill all required fields.','#E67E22'); return; }
+  addToStore('lf', {id:Date.now(), type, name, phone, desc, loc, time:getVal('lf-time'), extra:getVal('lf-extra'), status:'Open', ts:Date.now()});
+  $('lf-form').reset();
+  loadLF();
+  showNotif('✅ Report submitted! Shared with volunteers & nearby community.','#0D7A55');
+}
+
+function loadLF(search=''){
+  seedLF();
+  let data = getStore('lf');
+  if(lfFilter !== 'all') data = data.filter(r => r.type === lfFilter);
+  if(search) data = data.filter(r => (r.desc+r.loc+r.name).toLowerCase().includes(search.toLowerCase()));
+  const list = $('lf-list');
+  if(!data.length){ list.innerHTML='<div class="empty-state"><div class="es-icon">🔍</div><p>No reports found.</p></div>'; return; }
+  const labels = {'lost-person':'Lost Person','found-person':'Found Person','lost-object':'Lost Object','found-object':'Found Object'};
+  const badgeMap = {'lost-person':'badge-lost','found-person':'badge-found','lost-object':'badge-lost','found-object':'badge-found'};
+  list.innerHTML = data.map(r=>`
+    <div class="listing-card">
+      <div>
+        <div class="lc-badge ${badgeMap[r.type]||'badge-open'}">${labels[r.type]||r.type}</div>
+        <div class="lc-badge ${r.status==='Resolved'?'badge-resolved':'badge-open'}" style="margin-top:4px">${r.status}</div>
+      </div>
+      <div class="lc-content">
+        <div class="lc-title">${r.desc}</div>
+        <div class="lc-meta"><span>📍 ${r.loc}</span><span>👤 Reported by: ${r.name}</span><span>📞 ${r.phone}</span><span>🕐 ${fmtTime(r.ts)}</span></div>
+        ${r.extra?`<div style="font-size:0.82rem;color:var(--gray);margin-top:5px">${r.extra}</div>`:''}
+      </div>
+      <div class="lc-actions">
+        ${r.status!=='Resolved'?`<button class="btn btn-success btn-sm" onclick="markStatus('lf',${r.id},'Resolved')">✓ Mark Resolved</button>`:''}
+        <button class="btn btn-human btn-sm" onclick="contactLF(${r.id})">📞 Contact</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('lf',${r.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+function setLFFilter(f, el){ lfFilter=f; document.querySelectorAll('#lf-filters .pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); loadLF($('lf-search').value); }
+function filterLF(){ loadLF($('lf-search').value); }
+function contactLF(id){ const r=getStore('lf').find(x=>x.id===id); if(r) showNotif('📞 Contacting '+r.name+' at '+r.phone+'…','#1B4FBF'); }
+
+// ===== NGO =====
+const NGO_DATA = [
+  {name:'Bal Seva Ashram', type:'orphanage', icon:'👶', desc:'Care and education for orphaned and abandoned children aged 2–18. Fully residential.', city:'Ranchi', phone:'0651-101010', beds:40, typeLabel:'Orphanage'},
+  {name:'Vriddha Aashray', type:'oldage', icon:'👴', desc:'Home for elderly persons without family support. Medical care, meals and activities provided.', city:'Ranchi', phone:'0651-202020', beds:60, typeLabel:'Old Age Home'},
+  {name:'Manas Sewa Kendra', type:'mental', icon:'🧠', desc:'Mental health rehabilitation centre. Counselling, therapy and medication management.', city:'Ranchi', phone:'0651-303030', beds:30, typeLabel:'Mental Health'},
+  {name:'Pragati Punarvaas', type:'rehab', icon:'🌱', desc:'Rehabilitation centre for substance abuse recovery and reintegration into society.', city:'Ranchi', phone:'0651-404040', beds:25, typeLabel:'Rehab Centre'},
+  {name:'Asha Jyoti NGO', type:'general', icon:'🌟', desc:'General welfare NGO providing food, clothing and emergency shelter for all categories.', city:'Ranchi', phone:'0651-505050', beds:80, typeLabel:'General NGO'},
+  {name:'Nari Shakti Sewa', type:'general', icon:'👩', desc:'Support centre for abandoned, abused and vulnerable women with legal & medical assistance.', city:'Ranchi', phone:'0651-606060', beds:35, typeLabel:'Women\'s Shelter'},
+  {name:'Divya Drishti', type:'orphanage', icon:'🏠', desc:'Care home for visually impaired children with Braille education and vocational training.', city:'Ranchi', phone:'0651-707070', beds:20, typeLabel:'Orphanage'},
+  {name:'Swasthya Setu', type:'mental', icon:'💙', desc:'Community mental health outreach — free counselling, psychiatric support and crisis helpline.', city:'Ranchi', phone:'0651-808080', beds:0, typeLabel:'Mental Health'},
+];
+let ngoTypeFilter='all';
+function submitNGO(e){
+  e.preventDefault();
+  const name=getVal('ng-name'),phone=getVal('ng-phone'),who=getVal('ng-who'),loc=getVal('ng-loc');
+  if(!name||!phone||!who||!loc){ showNotif('⚠️ Fill all required fields.','#E67E22'); return; }
+  addToStore('ngo_refs', {id:Date.now(),name,phone,who,inst:getVal('ng-inst'),loc,urgency:getVal('ng-urgency'),desc:getVal('ng-desc'),ts:Date.now()});
+  $('ngo-form').reset();
+  showNotif('✅ Referral submitted! Our team will coordinate within 1 hour.','#0D7A55');
+}
+function filterNGOType(t,el){ ngoTypeFilter=t; document.querySelectorAll('.filter-pills .pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); renderNGODirectory(); }
+function filterNGOs(){ renderNGODirectory(); }
+function renderNGODirectory(){
+  const search = ($('ngo-search')||{}).value||'';
+  let data = NGO_DATA;
+  if(ngoTypeFilter!=='all') data=data.filter(n=>n.type===ngoTypeFilter);
+  if(search) data=data.filter(n=>(n.name+n.desc+n.city).toLowerCase().includes(search.toLowerCase()));
+  const colors = {orphanage:'background:#EEF3FF;color:#1B4FBF',oldage:'background:#FFF8EC;color:#854F0B',mental:'background:#F0EEFF;color:#4A27C2',rehab:'background:#EAF7F2;color:#0D7A55',general:'background:#FFF0EC;color:#993C1D'};
+  $('ngo-directory').innerHTML = data.map(n=>`
+    <div class="ngo-card">
+      <span class="ngo-icon">${n.icon}</span>
+      <div class="ngo-name">${n.name}</div>
+      <span class="ngo-type" style="${colors[n.type]||colors.general}">${n.typeLabel}</span>
+      <div class="ngo-desc">${n.desc}</div>
+      <div class="ngo-meta">
+        <span>📍 ${n.city}</span>
+        ${n.beds?`<span>🛏 Capacity: ${n.beds} beds</span>`:''}
+        <span>📞 ${n.phone}</span>
+      </div>
+      <a href="tel:${n.phone}" class="btn btn-human btn-sm" style="text-decoration:none;display:block;text-align:center">📞 Call Now</a>
+    </div>`).join('');
+}
+function loadNGO(){ renderNGODirectory(); }
+
+// ===== QUERIES =====
+function seedQueries(){
+  if(getStore('queries').length) return;
+  const seeds=[
+    {id:1, name:'Mohan Verma', contact:'9812345678', cat:'Government Schemes', city:'Ranchi', question:'How do I apply for PM Awas Yojana housing scheme? What documents are needed?', status:'Answered', answer:'Visit your nearest Panchayat office or CSC centre with Aadhaar, income certificate, and ration card. Apply online at pmaymis.gov.in.', ts:Date.now()-172800000},
+    {id:2, name:'Savita Devi', contact:'9876512345', cat:'Medical Help', city:'Ranchi', question:'Is there any free dialysis facility available in Ranchi for BPL families?', status:'Answered', answer:'RIMS Hospital Ranchi has free dialysis for BPL patients. Carry Aadhaar, BPL card, and doctor referral. Call 0651-2542100.', ts:Date.now()-86400000},
+    {id:3, name:'Rajan Kumar', contact:'9765432100', cat:'Legal Aid', city:'Jharkhand', question:'My employer is not paying my wages for 2 months. Where do I complain?', status:'Open', answer:'', ts:Date.now()-3600000},
+  ];
+  setStore('queries', seeds);
+}
+function submitQuery(e){
+  e.preventDefault();
+  const name=getVal('q-name'),contact=getVal('q-contact'),question=getVal('q-question');
+  if(!name||!contact||!question){ showNotif('⚠️ Fill required fields.','#E67E22'); return; }
+  addToStore('queries',{id:Date.now(),name,contact,cat:getVal('q-cat'),city:getVal('q-city'),question,status:'Open',answer:'',ts:Date.now()});
+  $('query-form').reset();
+  loadQueries();
+  showNotif('✅ Question posted! You\'ll get an answer within 24 hours.','#0D7A55');
+}
+function loadQueries(search=''){
+  seedQueries();
+  let data=getStore('queries');
+  if(search) data=data.filter(q=>(q.question+q.cat+q.name).toLowerCase().includes(search.toLowerCase()));
+  const list=$('query-list');
+  if(!data.length){ list.innerHTML='<div class="empty-state"><div class="es-icon">ℹ️</div><p>No questions yet.</p></div>'; return; }
+  list.innerHTML=data.map(q=>`
+    <div class="query-card">
+      <div class="qc-head">
+        <div>
+          <div class="qc-title">${q.question}</div>
+          <div class="qc-meta"><span>📂 ${q.cat}</span><span>👤 ${q.name}</span>${q.city?`<span>📍 ${q.city}</span>`:''}<span>🕐 ${fmtTime(q.ts)}</span></div>
+        </div>
+        <div class="lc-badge ${q.status==='Answered'?'badge-resolved':'badge-pending'}">${q.status}</div>
+      </div>
+      ${q.answer?`<div class="qc-answer"><div class="qc-answer-label">Answer from Volunteer</div>${q.answer}</div>`:''}
+      <div style="display:flex;gap:8px;margin-top:0.75rem;flex-wrap:wrap">
+        ${q.status==='Open'?`<button class="btn btn-human btn-sm" onclick="answerQuery(${q.id})">✍️ Provide Answer</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="deleteEntry('queries',${q.id})">🗑 Remove</button>
+      </div>
+    </div>`).join('');
+}
+function answerQuery(id){
+  const ans=prompt('Enter your answer:');
+  if(!ans) return;
+  const data=getStore('queries');
+  const idx=data.findIndex(q=>q.id===id);
+  if(idx>-1){ data[idx].answer=ans; data[idx].status='Answered'; setStore('queries',data); loadQueries(); showNotif('✅ Answer posted!','#0D7A55'); }
+}
+function filterQueries(){ loadQueries($('q-search').value); }
+
+// ===== COMMUNITY =====
+let commFilter='all';
+function submitComm(e){
+  e.preventDefault();
+  const name=getVal('cm-name'),phone=getVal('cm-phone'),area=getVal('cm-area'),details=getVal('cm-details');
+  if(!name||!phone||!area||!details){ showNotif('⚠️ Fill all required fields.','#E67E22'); return; }
+  addToStore('community',{id:Date.now(),intent:getVal('cm-intent'),name,phone,type:getVal('cm-type'),area,avail:getVal('cm-avail'),details,ts:Date.now()});
+  $('comm-form').reset();
+  loadComm();
+  showNotif('✅ Posted to community board!','#0D7A55');
+}
+function seedComm(){
+  if(getStore('community').length) return;
+  const seeds=[
+    {id:1,intent:'offer',name:'Anjali S.',phone:'9876500100',type:'Share food / groceries',area:'Lalpur, Ranchi',avail:'Daily evenings',details:'I cook extra food daily. Can provide home-cooked meals for 1-2 people in need near Lalpur area.',ts:Date.now()-7200000},
+    {id:2,intent:'need',name:'Suresh M.',phone:'9876500200',type:'Give a ride / transport',area:'Doranda, Ranchi',avail:'',details:'Need a ride to RIMS hospital on Tuesday at 8 AM for my mother\'s dialysis. Will contribute for fuel.',ts:Date.now()-3600000},
+    {id:3,intent:'offer',name:'Priya T.',phone:'9876500300',type:'Share skills (teaching, plumbing, etc.)',area:'Kanke, Ranchi',avail:'Weekends',details:'I am a teacher. Happy to give free coaching to underprivileged students for Class 8-10 Maths and Science.',ts:Date.now()-86400000},
+  ];
+  setStore('community',seeds);
+}
+function loadComm(){
+  seedComm();
+  let data=getStore('community');
+  if(commFilter!=='all') data=data.filter(c=>c.intent===commFilter);
+  const list=$('comm-list');
+  if(!data.length){ list.innerHTML='<div class="empty-state"><div class="es-icon">🤲</div><p>No posts yet.</p></div>'; return; }
+  const initials=n=>n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const colors=['#EEF3FF','#EAF7F2','#FFF8EC','#F0EEFF','#FFF0EC'];
+  const textColors=['#1B4FBF','#0D7A55','#854F0B','#4A27C2','#993C1D'];
+  list.innerHTML=data.map((c,i)=>`
+    <div class="comm-card">
+      <div class="cc-avatar" style="background:${colors[i%5]};color:${textColors[i%5]}">${initials(c.name)}</div>
+      <div class="cc-info">
+        <div class="cc-head">
+          <span class="cc-name">${c.name}</span>
+          <span class="cc-type ${c.intent==='offer'?'type-offer':'type-need'}">${c.intent==='offer'?'Offering Help':'Needs Help'}</span>
+        </div>
+        <div style="font-size:0.8rem;color:var(--gray);margin-bottom:6px">📂 ${c.type} • 📍 ${c.area}${c.avail?' • ⏰ '+c.avail:''}</div>
+        <div class="cc-desc">${c.details}</div>
+        <div class="cc-footer">
+          <span>🕐 ${fmtTime(c.ts)}</span>
+          <button class="btn btn-human btn-sm" onclick="showNotif('📞 Connecting you with '+${JSON.stringify(c.name)}+' at ${c.phone}…','#1B4FBF')">📞 Connect</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteEntry('community',${c.id})">🗑</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function setCFilter(f,el){ commFilter=f; document.querySelectorAll('#panel-community .pill').forEach(p=>p.classList.remove('active')); el.classList.add('active'); loadComm(); }
+
+// ===== SHARED =====
+function markStatus(store, id, status){
+  const data=getStore(store);
+  const idx=data.findIndex(r=>r.id===id);
+  if(idx>-1){ data[idx].status=status; setStore(store,data); }
+  if(store==='abled') loadAbled();
+  else if(store==='homeless') loadHomeless();
+  else if(store==='lf') loadLF();
+  showNotif('✅ Status updated to: '+status,'#0D7A55');
+}
+function deleteEntry(store, id){
+  if(!confirm('Remove this entry?')) return;
+  const data=getStore(store).filter(r=>r.id!==id);
+  setStore(store,data);
+  if(store==='abled') loadAbled();
+  else if(store==='homeless') loadHomeless();
+  else if(store==='lf') loadLF();
+  else if(store==='queries') loadQueries();
+  else if(store==='community') loadComm();
+  showNotif('🗑 Entry removed.','#C0392B');
+}
+
+// ===== INIT =====
+window.onload = () => {
+  loadAbled();
+  // check hash
+  if(location.hash==='#lostfound'){
+    const btn=document.querySelector('[onclick*="lostfound"]');
+    if(btn) btn.click();
+  }
+};
+</script>
+</body>
+</html>

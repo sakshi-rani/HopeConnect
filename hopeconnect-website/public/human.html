@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Human Help — HopeConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/human.css">
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Hope<span>Connect</span></a>
+  <button class="nav-back" onclick="history.length>1?history.back():window.location.href='/'" title="Go back">&#8592; Back</button>
+  <div class="nav-right">
+    <div class="nav-search">
+      <span class="nav-search-icon">🔍</span>
+      <input type="text" id="global-search" placeholder="Search..." onkeyup="filterTabs(this.value)"/>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <ul class="mobile-links">
+    <li><a href="/" onclick="closeMenu()">🏠 Home</a></li>
+    <li><a href="/human" class="active" onclick="closeMenu()">🤝 Human Help</a></li>
+    <li><a href="/animal" onclick="closeMenu()">🐾 Animal Help</a></li>
+    <li><a href="/about" onclick="closeMenu()">ℹ️ About</a></li>
+    <li><a href="/#volunteer" onclick="closeMenu()">🙋 Volunteer</a></li>
+  </ul>
+</div>
+
+<div class="page-hero">
+  <div class="ph-inner">
+    <div class="ph-tag">Human Help</div>
+    <h1>Support for<br>Every Person</h1>
+    <p>From specially-abled individuals to those facing homelessness — we connect every person to the right resource, right when they need it.</p>
+  </div>
+</div>
+
+<div class="tabs-grid-container">
+  <div class="tabs-grid" id="tabs-grid">
+    <a href="/specially-abled" class="tab-card" data-name="abled">
+      <div class="tab-icon">♿</div>
+      <div class="tab-label">Specially Abled</div>
+      <div class="tab-desc">Support for disabilities</div>
+      <div class="tab-arrow">→</div>
+    </a>
+    <button class="tab-card" onclick="showTab('homeless',this)" data-name="homeless">
+      <div class="tab-icon">🏠</div>
+      <div class="tab-label">Homeless</div>
+      <div class="tab-desc">Shelter & meals</div>
+      <div class="tab-arrow">→</div>
+    </button>
+    <button class="tab-card" id="lf-tab" onclick="showTab('lostfound',this)" data-name="lostfound">
+      <div class="tab-icon">🔍</div>
+      <div class="tab-label">Lost & Found</div>
+      <div class="tab-desc">Find missing people</div>
+      <div class="tab-arrow">→</div>
+    </button>
+    <button class="tab-card" onclick="showTab('ngo',this)" data-name="ngo">
+      <div class="tab-icon">🏛️</div>
+      <div class="tab-label">NGOs & Care</div>
+      <div class="tab-desc">Care institutions</div>
+      <div class="tab-arrow">→</div>
+    </button>
+    <button class="tab-card" onclick="showTab('infoDesk',this)" data-name="infoDesk">
+      <div class="tab-icon">ℹ️</div>
+      <div class="tab-label">Info Desk</div>
+      <div class="tab-desc">Q&A & guidance</div>
+      <div class="tab-arrow">→</div>
+    </button>
+    <button class="tab-card" onclick="showTab('community',this)" data-name="community">
+      <div class="tab-icon">🤲</div>
+      <div class="tab-label">Community</div>
+      <div class="tab-desc">Help board</div>
+      <div class="tab-arrow">→</div>
+    </button>
+  </div>
+</div>
+
+<main>
+
+<!-- ======== SPECIALLY ABLED ======== -->
+<div class="section-panel active" id="panel-abled">
+  <div class="alert-banner alert-info">
+    ℹ️ All requests are reviewed by trained volunteers. Response time: <strong>1–3 hours</strong> for standard, <strong>under 30 minutes</strong> for urgent.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-blue">♿</div>
+      <div class="fc-head-text">
+        <h3>Request Disability Support</h3>
+        <p>For blind, deaf, non-verbal, physically handicapped & specially-abled individuals</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="abled-form" onsubmit="submitAbled(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input type="text" required placeholder="Your full name" id="a-name"/></div>
+          <div class="form-group"><label>Phone Number *</label><input type="tel" required placeholder="10-digit number" id="a-phone" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Type of Disability</label>
+            <select id="a-type">
+              <option value="">Select type</option>
+              <option>Visually Impaired (Blind / Low Vision)</option>
+              <option>Hearing Impaired (Deaf)</option>
+              <option>Non-verbal / Speech Impaired</option>
+              <option>Physically Handicapped</option>
+              <option>Multiple Disabilities</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Support Needed</label>
+            <select id="a-support">
+              <option value="">Select support type</option>
+              <option>Guide Volunteer</option>
+              <option>Sign Language Interpreter</option>
+              <option>Wheelchair / Mobility Aid</option>
+              <option>Transport Assistance</option>
+              <option>Assistive Device (Cane, Hearing Aid)</option>
+              <option>Escort to Hospital/Office</option>
+              <option>Home Visit</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your City / Area *</label><input type="text" required placeholder="e.g. Ranchi, Jharkhand" id="a-city"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="a-urgency">
+              <option>Normal (within today)</option>
+              <option>Urgent (within 1-2 hours)</option>
+              <option>Emergency (immediate)</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Additional Details</label><textarea placeholder="Describe your specific need in detail..." id="a-details"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Request →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">We'll call you within 2 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Submitted Requests -->
+  <div class="listings-head">
+    <h3>My Support Requests</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadAbled()">🔄 Refresh</button>
+  </div>
+  <div id="abled-list" class="cards-list"></div>
+</div>
+
+<!-- ======== HOMELESS ======== -->
+<div class="section-panel" id="panel-homeless">
+  <div class="alert-banner alert-warn">
+    🏠 If you see someone in immediate danger, call <strong>112</strong>. For shelter referrals, fill the form below.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-coral">🏠</div>
+      <div class="fc-head-text">
+        <h3>Find Shelter & Support</h3>
+        <p>Shelter connections, meals, hygiene kits & rehabilitation for homeless individuals and families</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="homeless-form" onsubmit="submitHomeless(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Name (Optional)</label><input type="text" placeholder="Anonymous is okay" id="h-name"/></div>
+          <div class="form-group"><label>Phone (Optional)</label><input type="tel" placeholder="For callback" id="h-phone"/></div>
+          <div class="form-group"><label>Current Location *</label><input type="text" required placeholder="Landmark, area, city" id="h-location"/></div>
+          <div class="form-group"><label>Number of People</label>
+            <select id="h-count">
+              <option>Just me (1 person)</option>
+              <option>2 people</option>
+              <option>Small family (3–4)</option>
+              <option>Family with children</option>
+              <option>Group (5 or more)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Immediate Need</label>
+            <select id="h-need">
+              <option>Shelter for tonight</option>
+              <option>Food & drinking water</option>
+              <option>Medical attention</option>
+              <option>Clothing / blanket</option>
+              <option>All of the above</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Duration Homeless</label>
+            <select id="h-duration">
+              <option>Since today</option>
+              <option>A few days</option>
+              <option>1–4 weeks</option>
+              <option>1–6 months</option>
+              <option>More than 6 months</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Situation Details (Optional)</label><textarea placeholder="Tell us more so we can find the best shelter for you..." id="h-details"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Find Nearest Shelter →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Nearest shelter shown immediately</span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="homeless-result"></div>
+
+  <div class="listings-head" style="margin-top:1.5rem">
+    <h3>Reported Homeless Cases</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadHomeless()">🔄 Refresh</button>
+  </div>
+  <div id="homeless-list" class="cards-list"></div>
+</div>
+
+<!-- ======== LOST & FOUND ======== -->
+<div id="lostfound"></div>
+<div class="section-panel" id="panel-lostfound">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-purple">🔍</div>
+      <div class="fc-head-text">
+        <h3>Report Lost or Found</h3>
+        <p>Missing person, found individual, lost object, or found belongings</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="lf-form" onsubmit="submitLF(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Report Type *</label>
+            <select id="lf-type" required>
+              <option value="">Select type</option>
+              <option value="lost-person">Lost Person (Missing)</option>
+              <option value="found-person">Found a Person</option>
+              <option value="lost-object">Lost Object / Belonging</option>
+              <option value="found-object">Found an Object</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your Name *</label><input type="text" required id="lf-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Your Phone *</label><input type="tel" required id="lf-phone" placeholder="Contact number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Description *</label><input type="text" required id="lf-desc" placeholder="Person: age, clothing, appearance / Object: item name, color"/></div>
+          <div class="form-group"><label>Location *</label><input type="text" required id="lf-loc" placeholder="Last seen / found location"/></div>
+          <div class="form-group"><label>Date & Time</label><input type="datetime-local" id="lf-time"/></div>
+          <div class="form-group full"><label>Additional Details</label><textarea placeholder="Any other identifying information, circumstances, photos description..." id="lf-extra"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Report →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>All Lost & Found Reports</h3>
+    <div class="search-bar">
+      <input type="text" id="lf-search" placeholder="Search reports..." oninput="filterLF()"/>
+    </div>
+  </div>
+  <div class="filter-pills" id="lf-filters">
+    <span class="pill active" onclick="setLFFilter('all',this)">All</span>
+    <span class="pill" onclick="setLFFilter('lost-person',this)">Lost Person</span>
+    <span class="pill" onclick="setLFFilter('found-person',this)">Found Person</span>
+    <span class="pill" onclick="setLFFilter('lost-object',this)">Lost Object</span>
+    <span class="pill" onclick="setLFFilter('found-object',this)">Found Object</span>
+  </div>
+  <div id="lf-list" class="cards-list"></div>
+</div>
+
+<!-- ======== NGOs & CARE ======== -->
+<div class="section-panel" id="panel-ngo">
+  <div class="alert-banner alert-info">
+    🏛️ Found someone who needs institutional care? Use the form below to refer them.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-blue">📋</div>
+      <div class="fc-head-text">
+        <h3>Refer a Person to Care</h3>
+        <p>Connect vulnerable individuals to NGOs, orphanages, old age homes, mental hospitals</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="ngo-form" onsubmit="submitNGO(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="ng-name" placeholder="Reporting person"/></div>
+          <div class="form-group"><label>Your Phone *</label><input required type="tel" id="ng-phone" placeholder="Contact" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Who Needs Help *</label>
+            <select required id="ng-who">
+              <option value="">Select</option>
+              <option>Child / Orphan</option>
+              <option>Elderly Person</option>
+              <option>Person with Mental Health Issue</option>
+              <option>Differently-abled Adult</option>
+              <option>Abandoned / Vulnerable Woman</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Best Suited Institution</label>
+            <select id="ng-inst">
+              <option>NGO (General)</option>
+              <option>Orphanage / Child Care</option>
+              <option>Old Age Home</option>
+              <option>Mental Health Hospital</option>
+              <option>Rehabilitation Centre</option>
+              <option>Police Station (immediate safety)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Person's Location *</label><input required type="text" id="ng-loc" placeholder="Where is this person now?"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="ng-urgency">
+              <option>Normal</option>
+              <option>Urgent</option>
+              <option>Emergency — immediate danger</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Description *</label><textarea required id="ng-desc" placeholder="Physical description, situation, any known history..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Referral →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head" style="margin-top:1.5rem">
+    <h3>Partner NGOs & Institutions</h3>
+    <div class="search-bar">
+      <input type="text" id="ngo-search" placeholder="Search NGOs..." oninput="filterNGOs()"/>
+    </div>
+  </div>
+  <div class="filter-pills">
+    <span class="pill active" onclick="filterNGOType('all',this)">All</span>
+    <span class="pill" onclick="filterNGOType('orphanage',this)">Orphanage</span>
+    <span class="pill" onclick="filterNGOType('oldage',this)">Old Age Home</span>
+    <span class="pill" onclick="filterNGOType('mental',this)">Mental Health</span>
+    <span class="pill" onclick="filterNGOType('rehab',this)">Rehab Centre</span>
+    <span class="pill" onclick="filterNGOType('general',this)">General NGO</span>
+  </div>
+  <div id="ngo-directory" class="ngo-grid"></div>
+</div>
+
+<!-- ======== INFO DESK ======== -->
+<div class="section-panel" id="panel-infoDesk">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-amber">ℹ️</div>
+      <div class="fc-head-text">
+        <h3>Ask the Community</h3>
+        <p>Post questions about government schemes, welfare, legal aid, medical help, education</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="query-form" onsubmit="submitQuery(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="q-name" placeholder="Full name"/></div>
+          <div class="form-group"><label>Phone / Email *</label><input required type="text" id="q-contact" placeholder="For reply"/></div>
+          <div class="form-group"><label>Category</label>
+            <select id="q-cat">
+              <option>Government Schemes</option>
+              <option>Welfare & Subsidies</option>
+              <option>Legal Aid</option>
+              <option>Medical Help</option>
+              <option>Education & Scholarships</option>
+              <option>Employment & Jobs</option>
+              <option>Housing & Land</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>City / State</label><input type="text" id="q-city" placeholder="Your location"/></div>
+          <div class="form-group full"><label>Your Question *</label><textarea required id="q-question" placeholder="Be as specific as possible — what exactly do you need help with?"></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Post Question →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Answered within 24 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Questions & Answers Board</h3>
+    <div class="search-bar">
+      <input type="text" id="q-search" placeholder="Search questions..." oninput="filterQueries()"/>
+    </div>
+  </div>
+  <div id="query-list"></div>
+</div>
+
+<!-- ======== COMMUNITY ======== -->
+<div class="section-panel" id="panel-community">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-green">🤲</div>
+      <div class="fc-head-text">
+        <h3>Community Help Board</h3>
+        <p>Offer help or request support from people in your area</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="comm-form" onsubmit="submitComm(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>I want to... *</label>
+            <select required id="cm-intent">
+              <option value="offer">Offer Help to Someone</option>
+              <option value="need">Request Help from Community</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="cm-name" placeholder="Your name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="cm-phone" placeholder="Contact number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Type of Help</label>
+            <select id="cm-type">
+              <option>Give a ride / transport</option>
+              <option>Share food / groceries</option>
+              <option>Help with errands</option>
+              <option>Share skills (teaching, plumbing, etc.)</option>
+              <option>Donate items / clothing</option>
+              <option>Emotional / mental support</option>
+              <option>Medical accompaniment</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your Area / City *</label><input required type="text" id="cm-area" placeholder="Locality, city"/></div>
+          <div class="form-group"><label>Availability</label><input type="text" id="cm-avail" placeholder="e.g. Weekends, Evenings, Anytime"/></div>
+          <div class="form-group full"><label>Details *</label><textarea required id="cm-details" placeholder="Describe what you can offer or what you need..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Post to Community →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Community Board</h3>
+    <div style="display:flex;gap:8px">
+      <span class="pill active" onclick="setCFilter('all',this)">All</span>
+      <span class="pill" onclick="setCFilter('offer',this)">Offering Help</span>
+      <span class="pill" onclick="setCFilter('need',this)">Needs Help</span>
+    </div>
+  </div>
+  <div id="comm-list"></div>
+</div>
+
+</main>
+
+<!-- NOTIF -->
+<div class="notif" id="notif"></div>
+
+<script src="/js/human.js"></script>
+</body>
+</html>

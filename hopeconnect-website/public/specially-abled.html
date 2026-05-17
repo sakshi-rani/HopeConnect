@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Specially Abled Support — HopeConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/human.css">
+<link rel="stylesheet" href="/css/specially-abled.css">
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Hope<span>Connect</span></a>
+  <button class="nav-back" onclick="history.length>1?history.back():window.location.href='/human'" title="Go back">&#8592; Back</button>
+  <div class="nav-right">
+    <div class="nav-search">
+      <span class="nav-search-icon">🔍</span>
+      <input type="text" id="global-search" placeholder="Search..." onkeyup="filterCards(this.value)"/>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <ul class="mobile-links">
+    <li><a href="/" onclick="closeMenu()">🏠 Home</a></li>
+    <li><a href="/human" onclick="closeMenu()">🤝 Human Help</a></li>
+    <li><a href="/animal" onclick="closeMenu()">🐾 Animal Help</a></li>
+    <li><a href="/about" onclick="closeMenu()">ℹ️ About</a></li>
+    <li><a href="/#volunteer" onclick="closeMenu()">🙋 Volunteer</a></li>
+  </ul>
+</div>
+
+<div class="page-hero">
+  <div class="ph-inner">
+    <div class="ph-tag">Specially Abled Support</div>
+    <h1>We See You,<br>We Support You</h1>
+    <p>Dedicated resources, volunteers and assistance programs for every kind of differently-abled individual. Choose your category below.</p>
+  </div>
+</div>
+
+<!-- OPTION CARDS -->
+<div class="sa-cards-container">
+  <div class="sa-cards-grid" id="sa-cards-grid">
+
+    <button class="sa-card" onclick="showSection('blind',this)" data-name="blind">
+      <div class="sa-card-glow"></div>
+      <div class="sa-card-icon">👁️</div>
+      <div class="sa-card-label">Blind / Visually Impaired</div>
+      <div class="sa-card-desc">Guide volunteers, Braille resources & mobility aid</div>
+      <div class="sa-card-arrow">Explore →</div>
+    </button>
+
+    <button class="sa-card" onclick="showSection('deaf',this)" data-name="deaf">
+      <div class="sa-card-glow"></div>
+      <div class="sa-card-icon">👂</div>
+      <div class="sa-card-label">Deaf / Hearing Impaired</div>
+      <div class="sa-card-desc">Sign language interpreters & hearing support</div>
+      <div class="sa-card-arrow">Explore →</div>
+    </button>
+
+    <button class="sa-card" onclick="showSection('mute',this)" data-name="mute">
+      <div class="sa-card-glow"></div>
+      <div class="sa-card-icon">🗣️</div>
+      <div class="sa-card-label">Mute / Speech Impaired</div>
+      <div class="sa-card-desc">Communication aids & speech therapy referrals</div>
+      <div class="sa-card-arrow">Explore →</div>
+    </button>
+
+    <button class="sa-card" onclick="showSection('handicap',this)" data-name="handicap">
+      <div class="sa-card-glow"></div>
+      <div class="sa-card-icon">♿</div>
+      <div class="sa-card-label">Physically Handicapped</div>
+      <div class="sa-card-desc">Wheelchair aid, transport & mobility assistance</div>
+      <div class="sa-card-arrow">Explore →</div>
+    </button>
+
+  </div>
+</div>
+
+<main>
+
+<!-- ======== BLIND ======== -->
+<div class="sa-panel" id="panel-blind">
+  <div class="sa-panel-header">
+    <div class="sa-panel-icon" style="background:#EEF3FF">👁️</div>
+    <div>
+      <h2>Blind & Visually Impaired Support</h2>
+      <p>Connecting visually impaired individuals with trained guide volunteers, Braille materials and assistive devices.</p>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-chip">🦯 Guide Volunteers</div>
+    <div class="info-chip">📖 Braille Resources</div>
+    <div class="info-chip">🕶️ Assistive Devices</div>
+    <div class="info-chip">🚗 Safe Transport</div>
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-blue">👁️</div>
+      <div class="fc-head-text">
+        <h3>Request Blind Support</h3>
+        <p>Fill the form and a trained volunteer will reach you within 2 hours</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="blind-form" onsubmit="submitSA(event,'blind')">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input required type="text" id="bl-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="bl-phone" placeholder="10-digit number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Support Needed</label>
+            <select id="bl-support">
+              <option>Guide Volunteer (escort)</option>
+              <option>Braille Reading Material</option>
+              <option>White Cane / Mobility Aid</option>
+              <option>Screen Reader Setup Help</option>
+              <option>Transport to Hospital / Office</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>City / Area *</label><input required type="text" id="bl-city" placeholder="e.g. Ranchi, Jharkhand"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="bl-urgency">
+              <option>Normal (within today)</option>
+              <option>Urgent (within 2 hours)</option>
+              <option>Emergency (immediate)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Vision Level</label>
+            <select id="bl-level">
+              <option>Totally Blind</option>
+              <option>Low Vision (partial sight)</option>
+              <option>Night Blindness</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Additional Details</label><textarea id="bl-details" placeholder="Describe your specific need..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Request →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Volunteer will call within 2 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card" style="--rc:#EEF3FF;--rcc:#1B4FBF">
+      <div class="rc-icon">📞</div>
+      <div class="rc-title">National Blind Helpline</div>
+      <div class="rc-desc">24/7 support for visually impaired individuals</div>
+      <a href="tel:1800-180-5129" class="rc-btn">Call 1800-180-5129</a>
+    </div>
+    <div class="resource-card" style="--rc:#EAF7F2;--rcc:#0D7A55">
+      <div class="rc-icon">🏫</div>
+      <div class="rc-title">Braille Training Centre</div>
+      <div class="rc-desc">Free Braille literacy classes — Ranchi</div>
+      <a href="tel:0651-111222" class="rc-btn">Call 0651-111222</a>
+    </div>
+    <div class="resource-card" style="--rc:#F0EEFF;--rcc:#4A27C2">
+      <div class="rc-icon">🦯</div>
+      <div class="rc-title">Free White Cane Program</div>
+      <div class="rc-desc">Government scheme — free mobility canes</div>
+      <a href="tel:0651-333444" class="rc-btn">Call 0651-333444</a>
+    </div>
+  </div>
+
+  <div class="listings-head" style="margin-top:2rem">
+    <h3>Submitted Requests</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadSA('blind')">🔄 Refresh</button>
+  </div>
+  <div id="blind-list" class="cards-list"></div>
+</div>
+
+<!-- ======== DEAF ======== -->
+<div class="sa-panel" id="panel-deaf">
+  <div class="sa-panel-header">
+    <div class="sa-panel-icon" style="background:#FFF8EC">👂</div>
+    <div>
+      <h2>Deaf & Hearing Impaired Support</h2>
+      <p>Sign language interpreters, hearing aid assistance and community support for the hearing impaired.</p>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-chip">🤟 Sign Language</div>
+    <div class="info-chip">🎧 Hearing Aids</div>
+    <div class="info-chip">📋 Interpreter Service</div>
+    <div class="info-chip">🏥 Medical Escort</div>
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-amber">👂</div>
+      <div class="fc-head-text">
+        <h3>Request Deaf Support</h3>
+        <p>A sign language interpreter or support volunteer will be assigned to you</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="deaf-form" onsubmit="submitSA(event,'deaf')">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input required type="text" id="df-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Phone / WhatsApp *</label><input required type="tel" id="df-phone" placeholder="10-digit number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Support Needed</label>
+            <select id="df-support">
+              <option>Sign Language Interpreter</option>
+              <option>Hearing Aid Assistance</option>
+              <option>Hospital / Court Escort</option>
+              <option>Written Communication Help</option>
+              <option>Lip Reading Support</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>City / Area *</label><input required type="text" id="df-city" placeholder="e.g. Ranchi, Jharkhand"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="df-urgency">
+              <option>Normal (within today)</option>
+              <option>Urgent (within 2 hours)</option>
+              <option>Emergency (immediate)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Hearing Level</label>
+            <select id="df-level">
+              <option>Completely Deaf</option>
+              <option>Severe Hearing Loss</option>
+              <option>Moderate Hearing Loss</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Additional Details</label><textarea id="df-details" placeholder="Describe your specific need..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Request →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Interpreter assigned within 3 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card" style="--rc:#FFF8EC;--rcc:#854F0B">
+      <div class="rc-icon">🤟</div>
+      <div class="rc-title">ISL Interpreter Network</div>
+      <div class="rc-desc">Indian Sign Language interpreters on call</div>
+      <a href="tel:1800-180-9876" class="rc-btn">Call 1800-180-9876</a>
+    </div>
+    <div class="resource-card" style="--rc:#EEF3FF;--rcc:#1B4FBF">
+      <div class="rc-icon">🎧</div>
+      <div class="rc-title">Free Hearing Aid Scheme</div>
+      <div class="rc-desc">Govt. ADIP scheme — free hearing aids for BPL</div>
+      <a href="tel:0651-222333" class="rc-btn">Call 0651-222333</a>
+    </div>
+    <div class="resource-card" style="--rc:#EAF7F2;--rcc:#0D7A55">
+      <div class="rc-icon">🏫</div>
+      <div class="rc-title">Deaf Education Centre</div>
+      <div class="rc-desc">ISL classes & vocational training — Ranchi</div>
+      <a href="tel:0651-444555" class="rc-btn">Call 0651-444555</a>
+    </div>
+  </div>
+
+  <div class="listings-head" style="margin-top:2rem">
+    <h3>Submitted Requests</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadSA('deaf')">🔄 Refresh</button>
+  </div>
+  <div id="deaf-list" class="cards-list"></div>
+</div>
+
+<!-- ======== MUTE ======== -->
+<div class="sa-panel" id="panel-mute">
+  <div class="sa-panel-header">
+    <div class="sa-panel-icon" style="background:#EAF7F2">🗣️</div>
+    <div>
+      <h2>Mute & Speech Impaired Support</h2>
+      <p>Communication device assistance, speech therapy referrals and AAC (Augmentative Communication) support.</p>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-chip">📱 AAC Devices</div>
+    <div class="info-chip">🗒️ Communication Boards</div>
+    <div class="info-chip">🏥 Speech Therapy</div>
+    <div class="info-chip">🤝 Advocate Support</div>
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-green">🗣️</div>
+      <div class="fc-head-text">
+        <h3>Request Speech Support</h3>
+        <p>We'll connect you with a communication specialist or AAC device provider</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="mute-form" onsubmit="submitSA(event,'mute')">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input required type="text" id="mt-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Phone / WhatsApp *</label><input required type="tel" id="mt-phone" placeholder="10-digit number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Support Needed</label>
+            <select id="mt-support">
+              <option>AAC Device / App Setup</option>
+              <option>Communication Board</option>
+              <option>Speech Therapy Referral</option>
+              <option>Advocate for Hospital Visit</option>
+              <option>Text-to-Speech Tool Help</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>City / Area *</label><input required type="text" id="mt-city" placeholder="e.g. Ranchi, Jharkhand"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="mt-urgency">
+              <option>Normal (within today)</option>
+              <option>Urgent (within 2 hours)</option>
+              <option>Emergency (immediate)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Speech Condition</label>
+            <select id="mt-level">
+              <option>Non-verbal (no speech)</option>
+              <option>Partial Speech</option>
+              <option>Stuttering / Fluency Issue</option>
+              <option>Post-surgery / Injury</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Additional Details</label><textarea id="mt-details" placeholder="Describe your specific need..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Request →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Specialist assigned within 3 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card" style="--rc:#EAF7F2;--rcc:#0D7A55">
+      <div class="rc-icon">🗒️</div>
+      <div class="rc-title">Free AAC Communication Board</div>
+      <div class="rc-desc">Printed & digital boards for non-verbal individuals</div>
+      <a href="tel:0651-555666" class="rc-btn">Call 0651-555666</a>
+    </div>
+    <div class="resource-card" style="--rc:#EEF3FF;--rcc:#1B4FBF">
+      <div class="rc-icon">🏥</div>
+      <div class="rc-title">Speech Therapy Centre</div>
+      <div class="rc-desc">Free therapy sessions — RIMS Hospital, Ranchi</div>
+      <a href="tel:0651-2542100" class="rc-btn">Call 0651-2542100</a>
+    </div>
+    <div class="resource-card" style="--rc:#F0EEFF;--rcc:#4A27C2">
+      <div class="rc-icon">📱</div>
+      <div class="rc-title">Digital Voice App Help</div>
+      <div class="rc-desc">Setup assistance for text-to-speech mobile apps</div>
+      <a href="tel:0651-777888" class="rc-btn">Call 0651-777888</a>
+    </div>
+  </div>
+
+  <div class="listings-head" style="margin-top:2rem">
+    <h3>Submitted Requests</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadSA('mute')">🔄 Refresh</button>
+  </div>
+  <div id="mute-list" class="cards-list"></div>
+</div>
+
+<!-- ======== HANDICAP ======== -->
+<div class="sa-panel" id="panel-handicap">
+  <div class="sa-panel-header">
+    <div class="sa-panel-icon" style="background:#FFF0EC">♿</div>
+    <div>
+      <h2>Physically Handicapped Support</h2>
+      <p>Wheelchair assistance, accessible transport, home modifications and mobility aid programs.</p>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <div class="info-chip">♿ Wheelchair Aid</div>
+    <div class="info-chip">🚗 Accessible Transport</div>
+    <div class="info-chip">🏠 Home Modification</div>
+    <div class="info-chip">💊 Medical Escort</div>
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon fci-coral">♿</div>
+      <div class="fc-head-text">
+        <h3>Request Mobility Support</h3>
+        <p>Wheelchair, transport and physical assistance from trained volunteers</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="handicap-form" onsubmit="submitSA(event,'handicap')">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input required type="text" id="hc-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="hc-phone" placeholder="10-digit number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Support Needed</label>
+            <select id="hc-support">
+              <option>Wheelchair / Mobility Aid</option>
+              <option>Accessible Transport</option>
+              <option>Home Visit by Volunteer</option>
+              <option>Escort to Hospital</option>
+              <option>Ramp / Home Modification Help</option>
+              <option>Prosthetic / Orthotic Referral</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>City / Area *</label><input required type="text" id="hc-city" placeholder="e.g. Ranchi, Jharkhand"/></div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="hc-urgency">
+              <option>Normal (within today)</option>
+              <option>Urgent (within 2 hours)</option>
+              <option>Emergency (immediate)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Disability Type</label>
+            <select id="hc-level">
+              <option>Lower Limb Disability</option>
+              <option>Upper Limb Disability</option>
+              <option>Paralysis (partial)</option>
+              <option>Paralysis (full)</option>
+              <option>Cerebral Palsy</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Additional Details</label><textarea id="hc-details" placeholder="Describe your specific need..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-human">Submit Request →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Volunteer will call within 2 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="resource-grid">
+    <div class="resource-card" style="--rc:#FFF0EC;--rcc:#993C1D">
+      <div class="rc-icon">♿</div>
+      <div class="rc-title">Free Wheelchair Scheme</div>
+      <div class="rc-desc">Govt. ADIP scheme — free wheelchairs for BPL</div>
+      <a href="tel:1800-180-5129" class="rc-btn">Call 1800-180-5129</a>
+    </div>
+    <div class="resource-card" style="--rc:#EEF3FF;--rcc:#1B4FBF">
+      <div class="rc-icon">🚗</div>
+      <div class="rc-title">Accessible Transport</div>
+      <div class="rc-desc">Wheelchair-accessible vehicle booking — Ranchi</div>
+      <a href="tel:0651-888999" class="rc-btn">Call 0651-888999</a>
+    </div>
+    <div class="resource-card" style="--rc:#EAF7F2;--rcc:#0D7A55">
+      <div class="rc-icon">🦾</div>
+      <div class="rc-title">Prosthetic Limb Centre</div>
+      <div class="rc-desc">Free prosthetic & orthotic fitting — RIMS Ranchi</div>
+      <a href="tel:0651-2542100" class="rc-btn">Call 0651-2542100</a>
+    </div>
+  </div>
+
+  <div class="listings-head" style="margin-top:2rem">
+    <h3>Submitted Requests</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadSA('handicap')">🔄 Refresh</button>
+  </div>
+  <div id="handicap-list" class="cards-list"></div>
+</div>
+
+</main>
+
+<div class="notif" id="notif"></div>
+<script src="/js/specially-abled.js"></script>
+</body>
+</html>

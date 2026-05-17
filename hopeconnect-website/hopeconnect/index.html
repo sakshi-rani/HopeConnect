@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HopeConnect — Helping Hands, Healing Hearts</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#C9952A;--gold-l:#F0CC80;--deep:#0A1628;--deep2:#112240;
+  --cream:#FBF8F3;--white:#fff;--gray:#6B7280;--border:#E5E0D8;
+  --human:#1B4FBF;--human-l:#3B72E8;--human-pale:#EEF3FF;
+  --animal:#0D7A55;--animal-l:#16A876;--animal-pale:#E8F7F2;
+  --danger:#C0392B;--warn:#E67E22;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--deep);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,22,40,0.97);backdrop-filter:blur(16px);height:68px;display:flex;align-items:center;padding:0 6%;justify-content:space-between;border-bottom:1px solid rgba(201,149,42,0.25)}
+.logo{font-family:'Fraunces',serif;color:var(--gold);font-size:1.5rem;font-weight:900;text-decoration:none;letter-spacing:-0.5px}
+.logo span{color:#fff;font-weight:400}
+.nav-links{display:flex;gap:1.8rem;list-style:none;align-items:center}
+.nav-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:0.875rem;font-weight:500;transition:color 0.25s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold)}
+.nav-pill{background:var(--gold);color:var(--deep)!important;padding:7px 18px;border-radius:50px;font-weight:600!important;font-size:0.82rem!important}
+.nav-pill:hover{background:var(--gold-l)!important}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px;transition:all 0.3s}
+
+/* HERO */
+#hero{min-height:100vh;background:var(--deep2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:100px 6% 60px}
+.hero-mesh{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 50%,rgba(27,79,191,0.18) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 30%,rgba(13,122,85,0.15) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 50% 80%,rgba(201,149,42,0.1) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px}
+.hero-inner{position:relative;z-index:2;max-width:780px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,149,42,0.12);border:1px solid rgba(201,149,42,0.35);color:var(--gold-l);padding:7px 18px;border-radius:50px;font-size:0.8rem;font-weight:500;margin-bottom:2rem;letter-spacing:0.5px;animation:fadeUp 0.7s ease both}
+.dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+h1{font-family:'Fraunces',serif;font-size:clamp(3rem,6.5vw,5.5rem);color:#fff;line-height:1.05;font-weight:900;margin-bottom:1.25rem;animation:fadeUp 0.7s 0.15s ease both}
+h1 em{color:var(--gold);font-style:italic}
+.hero-p{color:rgba(255,255,255,0.6);font-size:1.1rem;line-height:1.75;max-width:560px;margin:0 auto 2.5rem;font-weight:300;animation:fadeUp 0.7s 0.3s ease both}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.7s 0.45s ease both}
+.btn{padding:13px 28px;border-radius:50px;font-weight:600;font-size:0.95rem;cursor:pointer;border:none;transition:all 0.25s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:'Outfit',sans-serif}
+.btn-gold{background:var(--gold);color:var(--deep)}
+.btn-gold:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,149,42,0.35)}
+.btn-ghost{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.25)}
+.btn-ghost:hover{background:rgba(255,255,255,0.14)}
+.hero-stats{display:flex;gap:0;justify-content:center;margin-top:4rem;border-top:1px solid rgba(255,255,255,0.1);padding-top:2.5rem;animation:fadeUp 0.7s 0.6s ease both}
+.hstat{flex:1;max-width:160px;text-align:center;padding:0 1.5rem}
+.hstat+.hstat{border-left:1px solid rgba(255,255,255,0.1)}
+.hstat-n{font-family:'Fraunces',serif;font-size:2rem;color:var(--gold);font-weight:700}
+.hstat-l{color:rgba(255,255,255,0.45);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+
+/* EMERGENCY BAR */
+.ebar{background:linear-gradient(135deg,#8B1A1A,#C0392B);padding:10px 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.ebar-l{color:#fff;font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:8px}
+.pulse-dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.5)}70%{box-shadow:0 0 0 8px rgba(255,255,255,0)}}
+.ebar-nums{display:flex;gap:8px;flex-wrap:wrap}
+.enum{color:#fff;padding:5px 14px;border-radius:50px;font-size:0.8rem;font-weight:600;background:rgba(255,255,255,0.2);text-decoration:none;border:1px solid rgba(255,255,255,0.3);transition:background 0.2s;white-space:nowrap}
+.enum:hover{background:rgba(255,255,255,0.3)}
+
+/* SECTION CHOOSER */
+#choose{padding:6rem 6%;background:var(--deep)}
+.choose-head{text-align:center;margin-bottom:3rem}
+.stag{display:inline-block;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;padding:5px 14px;border-radius:50px;margin-bottom:0.75rem;background:rgba(201,149,42,0.15);color:var(--gold)}
+.choose-head h2{font-family:'Fraunces',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);color:#fff;font-weight:700}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3px;max-width:1100px;margin:0 auto;border-radius:20px;overflow:hidden}
+.big-card{padding:3.5rem 2.5rem;cursor:pointer;transition:filter 0.3s;position:relative;overflow:hidden;text-decoration:none;display:block}
+.big-card:hover{filter:brightness(1.08)}
+.bc-human{background:linear-gradient(135deg,#0D1F4A,#162B6A)}
+.bc-animal{background:linear-gradient(135deg,#083320,#0A4A2C)}
+.bc-glow{position:absolute;width:300px;height:300px;border-radius:50%;filter:blur(80px);opacity:0.2;pointer-events:none}
+.bc-human .bc-glow{background:#3B72E8;top:-80px;right:-80px}
+.bc-animal .bc-glow{background:#16A876;bottom:-80px;left:-80px}
+.bc-icon{font-size:3rem;margin-bottom:1.2rem;display:block}
+.bc-title{font-family:'Fraunces',serif;color:#fff;font-size:2rem;font-weight:700;margin-bottom:0.6rem}
+.bc-desc{color:rgba(255,255,255,0.55);font-size:0.9rem;line-height:1.6;margin-bottom:1.8rem}
+.bc-list{list-style:none;margin-bottom:2rem}
+.bc-list li{color:rgba(255,255,255,0.65);font-size:0.85rem;padding:5px 0;display:flex;align-items:center;gap:8px}
+.bc-list li::before{content:'›';opacity:0.5}
+.bc-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:50px;font-weight:600;font-size:0.85rem}
+.bcb-human{background:var(--human);color:#fff}
+.bcb-animal{background:var(--animal);color:#fff}
+
+/* ABOUT STRIP */
+#about{padding:5rem 6%;background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1200px;margin:0 auto;align-items:center}
+.about-text h2{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:700;margin-bottom:1rem;line-height:1.2}
+.about-text p{color:var(--gray);line-height:1.8;margin-bottom:1.5rem}
+.about-nums{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.anum{background:#fff;border-radius:12px;padding:1.2rem;border:1px solid var(--border)}
+.anum-n{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;color:var(--gold)}
+.anum-l{font-size:0.8rem;color:var(--gray);margin-top:2px}
+.about-img{background:linear-gradient(135deg,var(--deep2),#1B3A6B);border-radius:20px;padding:2.5rem;color:#fff;text-align:center}
+.about-img h3{font-family:'Fraunces',serif;font-size:1.4rem;margin-bottom:1rem;color:var(--gold-l)}
+.help-types{display:flex;flex-direction:column;gap:0.75rem}
+.ht{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.07);padding:12px 16px;border-radius:10px;font-size:0.88rem;color:rgba(255,255,255,0.8)}
+.ht-icon{font-size:1.3rem}
+
+/* VOLUNTEER */
+#volunteer{background:var(--deep2);padding:5rem 6%;text-align:center}
+#volunteer h2{font-family:'Fraunces',serif;color:#fff;font-size:2.5rem;margin-bottom:0.75rem}
+#volunteer p{color:rgba(255,255,255,0.55);margin-bottom:2rem;max-width:450px;margin-left:auto;margin-right:auto}
+.vol-row{display:flex;gap:0.75rem;max-width:480px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.vol-inp{flex:1;min-width:220px;padding:12px 20px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:#fff;font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none}
+.vol-inp:focus{border-color:var(--gold)}
+.vol-inp::placeholder{color:rgba(255,255,255,0.3)}
+
+/* FOOTER */
+footer{background:#060E1A;padding:2.5rem 6%;text-align:center;color:rgba(255,255,255,0.3);font-size:0.82rem}
+.footer-logo{font-family:'Fraunces',serif;color:var(--gold);font-size:1.4rem;display:block;margin-bottom:0.5rem}
+
+/* NOTIF */
+.notif{position:fixed;bottom:24px;right:24px;background:var(--deep);color:#fff;padding:14px 18px;border-radius:14px;font-size:0.88rem;z-index:9999;transform:translateY(120px);opacity:0;transition:all 0.4s cubic-bezier(.175,.885,.32,1.275);border-left:4px solid var(--gold);max-width:340px;box-shadow:0 12px 40px rgba(0,0,0,0.4);line-height:1.5}
+.notif.show{transform:translateY(0);opacity:1}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .two-col,.about,.about-nums{grid-template-columns:1fr}
+  #about{grid-template-columns:1fr;gap:2rem;padding:3rem 5%}
+  .hero-stats{flex-wrap:wrap}
+  .hstat{border-left:none!important;border-top:1px solid rgba(255,255,255,0.1);padding:1rem;width:50%}
+  .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:rgba(10,22,40,0.98);flex-direction:column;padding:1.5rem;gap:1rem}
+  .nav-links.open{display:flex}
+  .hamburger{display:flex}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Hope<span>Connect</span></a>
+  <ul class="nav-links" id="navlinks">
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/human">Human Help</a></li>
+    <li><a href="/animal">Animal Help</a></li>
+    <li><a href="/human#lostfound">Lost & Found</a></li>
+    <li><a href="#volunteer" class="nav-pill">Volunteer</a></li>
+  </ul>
+  <div class="hamburger" onclick="document.getElementById('navlinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="ebar" style="margin-top:68px">
+  <div class="ebar-l"><div class="pulse-dot"></div><strong>24/7 Emergency Lines</strong> — Always here for you</div>
+  <div class="ebar-nums">
+    <a href="tel:112" class="enum">🚨 112 Emergency</a>
+    <a href="tel:1098" class="enum">👶 1098 Childline</a>
+    <a href="tel:14567" class="enum">👴 14567 Elder</a>
+    <a href="tel:1962" class="enum">🐾 1962 Animal</a>
+  </div>
+</div>
+
+<section id="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge"><div class="dot"></div>India's Community Help Network</div>
+    <h1>Helping <em>Hands</em>,<br>Healing Hearts</h1>
+    <p class="hero-p">One platform connecting people and animals in need with those who care. Find support, give support — for a kinder India.</p>
+    <div class="hero-btns">
+      <a href="/human" class="btn btn-gold">🤝 Human Help</a>
+      <a href="/animal" class="btn btn-ghost">🐾 Animal Help</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n" data-count="12400">0</div><div class="hstat-l">People Helped</div></div>
+      <div class="hstat"><div class="hstat-n" data-count="850">0</div><div class="hstat-l">Animals Rescued</div></div>
+      <div class="hstat"><div class="hstat-n" data-count="340">0</div><div class="hstat-l">Volunteers</div></div>
+      <div class="hstat"><div class="hstat-n" data-count="48">0</div><div class="hstat-l">NGO Partners</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="choose">
+  <div class="choose-head">
+    <div class="stag">Our Two Pillars</div>
+    <h2>How Can We Help You?</h2>
+  </div>
+  <div class="two-col">
+    <a href="/human" class="big-card bc-human">
+      <div class="bc-glow"></div>
+      <span class="bc-icon">🤝</span>
+      <div class="bc-title">Human Help</div>
+      <div class="bc-desc">Comprehensive support for every person in need — regardless of ability, background or circumstance.</div>
+      <ul class="bc-list">
+        <li>Specially-abled assistance (blind, deaf, handicapped)</li>
+        <li>Homeless shelter & meal connections</li>
+        <li>NGO, orphanage & old age home directory</li>
+        <li>Public info desk & lost and found</li>
+        <li>Community help board</li>
+      </ul>
+      <div class="bc-btn bcb-human">Explore Human Help →</div>
+    </a>
+    <a href="/animal" class="big-card bc-animal">
+      <div class="bc-glow"></div>
+      <span class="bc-icon">🐾</span>
+      <div class="bc-title">Animal Help</div>
+      <div class="bc-desc">Dedicated care and rescue for animals in distress — because every creature deserves kindness.</div>
+      <ul class="bc-list">
+        <li>Veterinary hospital finder</li>
+        <li>Report injured / stray animals</li>
+        <li>Animal shelter & rescue network</li>
+        <li>Pet adoption platform</li>
+        <li>Lost & found pets</li>
+      </ul>
+      <div class="bc-btn bcb-animal">Explore Animal Help →</div>
+    </a>
+  </div>
+</section>
+
+<div id="about" style="padding:5rem 6%">
+  <div class="about-text">
+    <div class="stag" style="background:rgba(27,79,191,0.1);color:var(--human)">About HopeConnect</div>
+    <h2>Built for Every Person,<br>Every Animal in Need</h2>
+    <p>HopeConnect is a community-driven platform that bridges the gap between those who need help and those who can provide it. From finding a shelter for the homeless to rescuing an injured stray — we make help accessible to all.</p>
+    <p>Our network of verified NGOs, volunteers, hospitals and shelters ensures fast, reliable support 24 hours a day, 7 days a week across India.</p>
+    <a href="/human" class="btn btn-gold" style="margin-right:0.75rem">Get Help Now</a>
+    <a href="#volunteer" class="btn" style="background:var(--border);color:var(--deep)">Volunteer</a>
+    <div class="about-nums" style="margin-top:1.5rem">
+      <div class="anum"><div class="anum-n">12K+</div><div class="anum-l">People helped this year</div></div>
+      <div class="anum"><div class="anum-n">850+</div><div class="anum-l">Animals rescued</div></div>
+      <div class="anum"><div class="anum-n">48</div><div class="anum-l">Partner NGOs</div></div>
+      <div class="anum"><div class="anum-n">30min</div><div class="anum-l">Avg rescue response</div></div>
+    </div>
+  </div>
+  <div class="about-img">
+    <h3>Services We Provide</h3>
+    <div class="help-types">
+      <div class="ht"><span class="ht-icon">♿</span>Specially-abled support & volunteers</div>
+      <div class="ht"><span class="ht-icon">🏠</span>Homeless shelter & food programs</div>
+      <div class="ht"><span class="ht-icon">🏛️</span>NGO & care institution directory</div>
+      <div class="ht"><span class="ht-icon">🔍</span>Lost & found — people & pets</div>
+      <div class="ht"><span class="ht-icon">🏥</span>Vet hospital & rescue services</div>
+      <div class="ht"><span class="ht-icon">❤️</span>Pet adoption platform</div>
+      <div class="ht"><span class="ht-icon">🤲</span>Community help board</div>
+    </div>
+  </div>
+</div>
+
+<section id="volunteer">
+  <div class="stag">Join the Movement</div>
+  <h2>Become a Volunteer</h2>
+  <p>Whether you have one hour a week or a full day, your time changes lives.</p>
+  <div class="vol-row">
+    <input class="vol-inp" type="email" id="vol-email" placeholder="Enter your email address"/>
+    <button class="btn btn-gold" onclick="registerVol()">Register Free →</button>
+  </div>
+  <p style="color:rgba(255,255,255,0.25);font-size:0.78rem;margin-top:1rem;margin-bottom:0">340+ volunteers already registered • No experience required</p>
+</section>
+
+<footer>
+  <span class="footer-logo">HopeConnect</span>
+  <p>Helping Hands, Healing Hearts — Connecting Communities Across India</p>
+  <p style="margin-top:6px">© 2025 HopeConnect. Made with ❤️ for those who need it most.</p>
+</footer>
+
+<div class="notif" id="notif"></div>
+
+<script>
+function showNotif(msg,color){
+  const n=document.getElementById('notif');
+  n.innerHTML=msg;
+  n.style.borderLeftColor=color||'var(--gold)';
+  n.classList.add('show');
+  clearTimeout(n._t);
+  n._t=setTimeout(()=>n.classList.remove('show'),4500);
+}
+function registerVol(){
+  const e=document.getElementById('vol-email');
+  if(!e.value||!e.value.includes('@')){showNotif('⚠️ Please enter a valid email address.','#E67E22');return;}
+  showNotif('🎉 Welcome! Volunteer confirmation sent to <strong>'+e.value+'</strong>. Check your inbox!','#0D7A55');
+  e.value='';
+}
+// Counter animation
+function animCount(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=+el.dataset.count,dur=1800;let start=null;
+    function step(t){
+      if(!start)start=t;
+      const p=Math.min((t-start)/dur,1),ease=1-Math.pow(1-p,3);
+      const v=Math.floor(ease*target);
+      el.textContent=target>=1000?(v/1000).toFixed(1)+'K+':v+(target===340?'+':target===48?'':'');
+      if(p<1)requestAnimationFrame(step);
+      else el.textContent=target>=10000?(target/1000).toFixed(1)+'K+':target+(target===340?'+':target===48?'':'');
+    }
+    requestAnimationFrame(step);
+  });
+}
+new IntersectionObserver(e=>{if(e[0].isIntersecting){animCount();e[0].target._obs.disconnect();}},{ threshold:0.5 }).observe(Object.assign(document.querySelector('.hero-stats'),{_obs:null,get _obs(){return this._observer},set _obs(v){this._observer=v}}));
+const hso=new IntersectionObserver(e=>{if(e[0].isIntersecting){animCount();hso.disconnect();}},{threshold:0.5});
+hso.observe(document.querySelector('.hero-stats'));
+</script>
+</body>
+</html>

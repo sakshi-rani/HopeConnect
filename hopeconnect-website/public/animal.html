@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Animal Help — HopeConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/animal.css">
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Hope<span>Connect</span></a>
+  <ul class="nav-links" id="navlinks">
+    <li><a href="/">Home</a></li>
+    <li><a href="/human">Human Help</a></li>
+    <li><a href="/animal" class="active">Animal Help</a></li>
+    <li><a href="/animal#adopt">Adoption</a></li>
+    <li><a href="/#volunteer" class="nav-pill">Volunteer</a></li>
+  </ul>
+  <div class="hamburger" onclick="document.getElementById('navlinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="ph-inner">
+    <div class="ph-tag">Animal Help</div>
+    <h1>Care for Every<br>Creature</h1>
+    <p>Rescuing, healing and rehoming animals — because every life matters, whether human or animal.</p>
+  </div>
+</div>
+
+<div class="tabs-bar">
+  <button class="tab active" onclick="showTab('rescue',this)">🆘 Report Rescue</button>
+  <button class="tab" onclick="showTab('vet',this)">🏥 Find Vet</button>
+  <button class="tab" id="adopt-tab" onclick="showTab('adopt',this)">❤️ Adoption</button>
+  <button class="tab" onclick="showTab('lostpet',this)">🔍 Lost Pets</button>
+  <button class="tab" onclick="showTab('shelter',this)">🏡 Shelters</button>
+</div>
+
+<main>
+
+<!-- ======== RESCUE ======== -->
+<div class="section-panel active" id="panel-rescue">
+  <div class="alert-banner alert-emergency">
+    🆘 If an animal is in immediate life-threatening danger, call <strong>1962</strong> now. For non-emergency rescues, use the form below.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">🆘</div>
+      <div class="fc-head-text">
+        <h3>Report Animal in Distress</h3>
+        <p>Injured, sick, abandoned or trapped animal — our rescue team responds within 30 minutes</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="rescue-form" onsubmit="submitRescue(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="r-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Your Phone *</label><input required type="tel" id="r-phone" placeholder="We'll call you" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Animal Type *</label>
+            <select required id="r-animal">
+              <option value="">Select animal</option>
+              <option>Dog</option><option>Cat</option><option>Bird</option>
+              <option>Cow / Buffalo</option><option>Monkey</option>
+              <option>Donkey / Horse</option><option>Snake</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Condition *</label>
+            <select required id="r-condition">
+              <option value="">Select condition</option>
+              <option>Injured / Bleeding</option>
+              <option>Sick / Lethargic / Not eating</option>
+              <option>Trapped / Stuck</option>
+              <option>Abandoned / Stray — needs shelter</option>
+              <option>Aggressive — danger to public</option>
+              <option>Hit by vehicle</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Number of Animals</label>
+            <select id="r-count">
+              <option>1 animal</option><option>2-3 animals</option>
+              <option>4-5 animals</option><option>6+ animals</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Urgency</label>
+            <select id="r-urgency">
+              <option>Moderate — within 1-2 hours</option>
+              <option>Urgent — within 30 minutes</option>
+              <option>Emergency — immediate</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Exact Location *</label><input required type="text" id="r-location" placeholder="Landmark, street name, area, city..."/></div>
+          <div class="form-group full"><label>Description</label><textarea id="r-desc" placeholder="Describe what you see — animal's condition, any immediate dangers, number of people nearby..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-animal">🚨 Send Rescue Team →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Avg response: 20–30 min</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Active Rescue Reports</h3>
+    <div style="display:flex;gap:8px">
+      <span class="pill active" onclick="setRFilter('all',this)">All</span>
+      <span class="pill" onclick="setRFilter('active',this)">Active</span>
+      <span class="pill" onclick="setRFilter('resolved',this)">Resolved</span>
+    </div>
+  </div>
+  <div id="rescue-list" class="cards-list"></div>
+</div>
+
+<!-- ======== VET ======== -->
+<div class="section-panel" id="panel-vet">
+  <div class="alert-banner alert-info">
+    🏥 For after-hours emergencies, call the 24/7 animal helpline: <strong>1962</strong>
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">📅</div>
+      <div class="fc-head-text">
+        <h3>Book a Vet Appointment</h3>
+        <p>Schedule a visit to any partner veterinary hospital below</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="vet-form" onsubmit="submitVetAppt(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Owner Name *</label><input required type="text" id="v-owner" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="v-phone" placeholder="Contact number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Pet Name</label><input type="text" id="v-petname" placeholder="Your pet's name"/></div>
+          <div class="form-group"><label>Animal Type *</label>
+            <select required id="v-animal">
+              <option value="">Select</option>
+              <option>Dog</option><option>Cat</option><option>Bird</option>
+              <option>Rabbit</option><option>Cow</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Visit Type *</label>
+            <select required id="v-type">
+              <option value="">Select</option>
+              <option>General Check-up</option>
+              <option>Vaccination</option>
+              <option>Surgery / Operation</option>
+              <option>Deworming</option>
+              <option>Dental Care</option>
+              <option>Emergency Treatment</option>
+              <option>Neutering / Spaying</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Preferred Hospital</label>
+            <select id="v-hospital">
+              <option>City Animal Hospital</option>
+              <option>Dr. Sharma Veterinary Clinic</option>
+              <option>Green Paws Animal Care</option>
+              <option>Prani Mitra Hospital</option>
+              <option>Any Available</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Preferred Date</label><input type="date" id="v-date"/></div>
+          <div class="form-group"><label>Preferred Time</label>
+            <select id="v-time">
+              <option>Morning (9 AM – 12 PM)</option>
+              <option>Afternoon (12 PM – 3 PM)</option>
+              <option>Evening (3 PM – 6 PM)</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Symptoms / Issue</label><textarea id="v-symptoms" placeholder="Describe the issue or reason for visit..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-animal">Book Appointment →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Partner Veterinary Hospitals</h3>
+    <div class="search-bar"><input type="text" id="vet-search" placeholder="Search hospitals..." oninput="filterVets()"/></div>
+  </div>
+  <div class="filter-pills" id="vet-filter-pills">
+    <span class="pill active" onclick="setVetFilter('all',this)">All</span>
+    <span class="pill" onclick="setVetFilter('24h',this)">24-Hour</span>
+    <span class="pill" onclick="setVetFilter('govt',this)">Government</span>
+    <span class="pill" onclick="setVetFilter('private',this)">Private</span>
+    <span class="pill" onclick="setVetFilter('surgery',this)">Surgery</span>
+  </div>
+  <div id="vet-directory" class="vet-grid"></div>
+
+  <div class="listings-head" style="margin-top:2rem">
+    <h3>My Appointments</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadVetAppts()">🔄 Refresh</button>
+  </div>
+  <div id="vet-appts" class="cards-list"></div>
+</div>
+
+<!-- ======== ADOPTION ======== -->
+<div class="section-panel" id="panel-adopt">
+  <div class="alert-banner alert-info">
+    ❤️ All adoption animals are vaccinated, health-checked and neutered/spayed. Home assessment required.
+  </div>
+
+  <div class="listings-head">
+    <h3>Animals Ready for Adoption</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="pill active" onclick="setPetFilter('all',this)">All Animals</span>
+      <span class="pill" onclick="setPetFilter('dog',this)">🐕 Dogs</span>
+      <span class="pill" onclick="setPetFilter('cat',this)">🐱 Cats</span>
+      <span class="pill" onclick="setPetFilter('bird',this)">🦜 Birds</span>
+      <span class="pill" onclick="setPetFilter('other',this)">🐰 Others</span>
+    </div>
+  </div>
+  <div id="pet-grid-container" class="pet-grid" style="margin-bottom:2.5rem"></div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">📝</div>
+      <div class="fc-head-text">
+        <h3>Submit Adoption Application</h3>
+        <p>Tell us about yourself and your home — we'll find the perfect match</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="adopt-form" onsubmit="submitAdopt(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input required type="text" id="ad-name" placeholder="Your name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="ad-phone" placeholder="Contact" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Email *</label><input required type="email" id="ad-email" placeholder="your@email.com"/></div>
+          <div class="form-group"><label>City / Area *</label><input required type="text" id="ad-city" placeholder="Your city"/></div>
+          <div class="form-group"><label>Animal Interested In</label>
+            <select id="ad-animal">
+              <option>Any — suggest best match</option>
+              <option>Dog</option><option>Cat</option>
+              <option>Bird</option><option>Rabbit</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Specific Pet (Optional)</label>
+            <input type="text" id="ad-specific" placeholder="e.g. Bruno, Luna (from listing)"/>
+          </div>
+          <div class="form-group"><label>Home Type *</label>
+            <select required id="ad-home">
+              <option value="">Select</option>
+              <option>Independent house with yard</option>
+              <option>Apartment — ground floor</option>
+              <option>Apartment — upper floor</option>
+              <option>Farmhouse / Rural home</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Other Pets?</label>
+            <select id="ad-otherpets">
+              <option>No other pets</option>
+              <option>Yes — other dogs</option>
+              <option>Yes — cats</option>
+              <option>Yes — mixed animals</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Prior Pet Experience</label>
+            <select id="ad-exp">
+              <option>First-time pet owner</option>
+              <option>Some experience (1-2 pets before)</option>
+              <option>Experienced (3+ pets)</option>
+              <option>Professional / vet / shelter worker</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Daily Time Available for Pet</label>
+            <select id="ad-time">
+              <option>1–2 hours</option><option>3–4 hours</option>
+              <option>5+ hours</option><option>Full day (work from home)</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Why do you want to adopt? *</label><textarea required id="ad-why" placeholder="Tell us why you'd be a wonderful home..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-animal">Submit Application →</button>
+          <span style="font-size:0.8rem;color:var(--gray)">Response within 48 hours</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Adoption Applications</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadAdoptApps()">🔄 Refresh</button>
+  </div>
+  <div id="adopt-apps" class="cards-list"></div>
+</div>
+
+<!-- ======== LOST PETS ======== -->
+<div class="section-panel" id="panel-lostpet">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">🔍</div>
+      <div class="fc-head-text">
+        <h3>Report Lost or Found Pet</h3>
+        <p>Help reunite pets with their families — every report helps</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="lp-form" onsubmit="submitLostPet(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Report Type *</label>
+            <select required id="lp-type">
+              <option value="">Select</option>
+              <option value="lost">My Pet is Lost</option>
+              <option value="found">I Found a Pet</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="lp-name" placeholder="Your name"/></div>
+          <div class="form-group"><label>Your Phone *</label><input required type="tel" id="lp-phone" placeholder="Contact" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Animal Type *</label>
+            <select required id="lp-animal">
+              <option value="">Select</option>
+              <option>Dog</option><option>Cat</option><option>Bird</option>
+              <option>Rabbit</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Pet Name (if known)</label><input type="text" id="lp-petname" placeholder="Pet's name (if known)"/></div>
+          <div class="form-group"><label>Color / Markings *</label><input required type="text" id="lp-color" placeholder="e.g. Golden brown, white patch on chest"/></div>
+          <div class="form-group"><label>Location *</label><input required type="text" id="lp-loc" placeholder="Last seen / where found"/></div>
+          <div class="form-group"><label>Date</label><input type="date" id="lp-date"/></div>
+          <div class="form-group full"><label>Additional Details</label><textarea id="lp-details" placeholder="Size, breed, collar, microchip, any distinctive features..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-animal">Submit Report →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Lost & Found Pet Reports</h3>
+    <div style="display:flex;gap:8px">
+      <span class="pill active" onclick="setLPFilter('all',this)">All</span>
+      <span class="pill" onclick="setLPFilter('lost',this)">Lost Pets</span>
+      <span class="pill" onclick="setLPFilter('found',this)">Found Pets</span>
+    </div>
+  </div>
+  <div id="lostpet-list" class="cards-list"></div>
+</div>
+
+<!-- ======== SHELTER ======== -->
+<div class="section-panel" id="panel-shelter">
+  <div class="alert-banner alert-info">
+    🏡 All partner shelters are verified and regularly inspected. Animals receive food, medical care and love.
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">📦</div>
+      <div class="fc-head-text">
+        <h3>Donate or Volunteer at a Shelter</h3>
+        <p>Contribute food, supplies, time or funds to local animal shelters</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="shelter-form" onsubmit="submitShelterHelp(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="sh-name" placeholder="Full name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="sh-phone" placeholder="Contact" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Type of Help *</label>
+            <select required id="sh-type">
+              <option value="">Select</option>
+              <option>Volunteer (animal care)</option>
+              <option>Donate food / supplies</option>
+              <option>Monetary donation</option>
+              <option>Foster an animal temporarily</option>
+              <option>Transport rescued animals</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Preferred Shelter</label>
+            <select id="sh-shelter">
+              <option>Paws & Care Animal Shelter</option>
+              <option>Happy Tails Sanctuary</option>
+              <option>Maitri Pashu Sewa Kendra</option>
+              <option>Any — wherever needed most</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Availability</label><input type="text" id="sh-avail" placeholder="e.g. Weekends, every Sunday"/></div>
+          <div class="form-group"><label>Your City *</label><input required type="text" id="sh-city" placeholder="Your city"/></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-animal">Sign Up to Help →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head" style="margin-top:0.5rem">
+    <h3>Partner Animal Shelters</h3>
+  </div>
+  <div id="shelter-directory" class="vet-grid"></div>
+</div>
+
+</main>
+
+<!-- VET BOOKING MODAL -->
+<div class="modal-overlay" id="vet-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="vet-modal-title">Book Appointment</h3>
+      <button class="modal-close" onclick="closeModal('vet-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-sub" id="vet-modal-sub"></p>
+      <div class="form-grid">
+        <div class="form-group"><label>Your Name *</label><input type="text" id="vm-name" placeholder="Full name"/></div>
+        <div class="form-group"><label>Phone *</label><input type="tel" id="vm-phone" placeholder="Contact"/></div>
+        <div class="form-group"><label>Pet Type *</label>
+          <select id="vm-pet"><option>Dog</option><option>Cat</option><option>Bird</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label>Visit Reason *</label>
+          <select id="vm-reason"><option>Check-up</option><option>Vaccination</option><option>Emergency</option><option>Surgery</option></select>
+        </div>
+        <div class="form-group"><label>Date</label><input type="date" id="vm-date"/></div>
+        <div class="form-group"><label>Time</label>
+          <select id="vm-time"><option>9 AM</option><option>11 AM</option><option>2 PM</option><option>4 PM</option></select>
+        </div>
+      </div>
+      <button class="btn btn-animal" style="width:100%;margin-top:1.2rem;justify-content:center" onclick="confirmVetBooking()">Confirm Booking →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PET DETAIL MODAL -->
+<div class="modal-overlay" id="pet-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="pet-modal-name">Pet Details</h3>
+      <button class="modal-close" onclick="closeModal('pet-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="pet-modal-body"></div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script src="/js/animal.js"></script>
+</body>
+</html>
