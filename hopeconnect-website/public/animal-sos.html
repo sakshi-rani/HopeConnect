@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Animal SOS — HopeConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --amber:#F5A623;--amber-d:#D4880B;--amber-l:#FFF3D6;
+  --red:#D0021B;--red-l:#FDE8EB;
+  --green:#0D7A55;--green-l:#E8F7F0;
+  --cream:#FFFDF5;--white:#fff;
+  --text:#1A1A1A;--muted:#6B7280;--border:#EAD9A8;
+  --deep:#0A1628;--nav-h:68px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;background:var(--red);height:var(--nav-h);display:flex;align-items:center;padding:0 5%;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.15)}
+.logo{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-icon{font-size:1.8rem;animation:logoBounce 3s ease-in-out infinite;display:inline-block}
+@keyframes logoBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.nav-back{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.4);color:#fff;padding:6px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.nav-back:hover{background:rgba(255,255,255,0.35);transform:translateX(-2px)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px;display:block}
+.mobile-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:var(--red);z-index:499;flex-direction:column;padding:12px 5% 20px;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+.mobile-menu.open{display:flex}
+.mobile-menu a{padding:10px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.92rem;color:#fff;text-decoration:none}
+.mobile-menu a:hover{background:rgba(255,255,255,0.2)}
+
+.page-hero{background:linear-gradient(135deg,#8B0011 0%,var(--red) 60%,#E8002A 100%);padding:48px 5% 0;position:relative;overflow:hidden}
+.page-hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:60px;background:var(--cream);border-radius:50% 50% 0 0 / 60px 60px 0 0}
+.ph-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between}
+.ph-text{padding-bottom:56px}
+.ph-tag{display:inline-block;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:5px 14px;border-radius:50px;font-size:0.75rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.ph-inner h1{font-family:'Fredoka One',cursive;color:#fff;font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;margin-bottom:6px;text-shadow:2px 3px 0 rgba(0,0,0,0.15)}
+.ph-inner p{color:rgba(255,255,255,0.9);font-size:1rem;line-height:1.5;max-width:420px;font-weight:600}
+.ph-emojis{display:flex;gap:8px;align-items:flex-end;padding-bottom:10px}
+.ph-emoji{font-size:3.5rem;animation:emojiBounce 2.5s ease-in-out infinite;display:inline-block}
+.ph-emoji:nth-child(2){animation-delay:0.4s}
+.ph-emoji:nth-child(3){animation-delay:0.8s}
+@keyframes emojiBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+.sos-cards-container{background:#fff;border-bottom:2px solid var(--border);padding:2rem 5%}
+.sos-cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;max-width:1200px;margin:0 auto}
+.sos-card{background:#fff;border:2px solid var(--border);border-radius:20px;padding:2rem 1.2rem 1.6rem;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;flex-direction:column;align-items:center;gap:0.5rem;text-align:center;transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);position:relative;overflow:hidden}
+.sos-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 32px rgba(208,2,27,0.15);border-color:var(--red)}
+.sos-card.active{background:linear-gradient(135deg,var(--red) 0%,#8B0011 100%);border-color:var(--red);box-shadow:0 14px 36px rgba(208,2,27,0.3);color:#fff}
+.sos-card.active .sos-card-label{color:#fff}
+.sos-card.active .sos-card-desc{color:rgba(255,255,255,0.85)}
+.sos-card-icon{font-size:2.8rem;margin-bottom:0.3rem;transition:transform 0.3s;display:block}
+.sos-card:hover .sos-card-icon{transform:scale(1.15) rotate(-5deg)}
+.sos-card-label{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--text)}
+.sos-card-desc{font-size:0.75rem;color:var(--muted);line-height:1.4;font-weight:600}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.sos-card{animation:cardIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both}
+.sos-card:nth-child(1){animation-delay:0s}
+.sos-card:nth-child(2){animation-delay:0.08s}
+.sos-card:nth-child(3){animation-delay:0.16s}
+.sos-card:nth-child(4){animation-delay:0.24s}
+
+main{max-width:1200px;margin:0 auto;padding:2.5rem 5%}
+.sos-panel{display:none}
+.sos-panel.active{display:block;animation:panelIn 0.4s cubic-bezier(0.4,0,0.2,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.form-card{background:#fff;border-radius:20px;border:2px solid var(--border);overflow:hidden;margin-bottom:2rem;box-shadow:0 4px 16px rgba(208,2,27,0.06)}
+.fc-head{padding:1.5rem 1.8rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:14px;background:var(--red-l)}
+.fc-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;background:var(--red);color:#fff}
+.fc-head-text h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--text)}
+.fc-head-text p{font-size:0.82rem;color:var(--muted);margin-top:2px;font-weight:600}
+.fc-body{padding:1.8rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:0.8rem;font-weight:800;color:var(--text);letter-spacing:0.3px}
+.form-group input,.form-group select,.form-group textarea{padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.9rem;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:#fff}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(208,2,27,0.1)}
+.form-group textarea{resize:vertical;min-height:90px}
+.submit-row{display:flex;align-items:center;gap:1rem;margin-top:0.5rem;flex-wrap:wrap}
+
+.btn{padding:11px 24px;border-radius:50px;font-weight:700;font-size:0.9rem;cursor:pointer;border:none;transition:all 0.25s;font-family:'Nunito',sans-serif;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+.btn-sos{background:var(--red);color:#fff}
+.btn-sos:hover{background:#8B0011;transform:translateY(-1px);box-shadow:0 6px 18px rgba(208,2,27,0.35)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:#085041;transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
+.btn-outline:hover{border-color:var(--red);color:var(--red)}
+.btn-sm{padding:7px 16px;font-size:0.8rem}
+.btn-danger{background:var(--red-l);color:var(--red);border:none}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-success{background:var(--green-l);color:var(--green);border:none}
+.btn-success:hover{background:var(--green);color:#fff}
+
+.listings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem}
+.listings-head h3{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--text)}
+.cards-list{display:flex;flex-direction:column;gap:0.8rem}
+.listing-card{background:#fff;border-radius:16px;border:2px solid var(--border);padding:1.2rem 1.4rem;display:flex;align-items:flex-start;gap:1rem;transition:all 0.2s}
+.listing-card:hover{box-shadow:0 6px 20px rgba(208,2,27,0.1);border-color:var(--red)}
+.lc-badge{flex-shrink:0;padding:4px 12px;border-radius:50px;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.badge-emergency{background:var(--red-l);color:var(--red)}
+.badge-active{background:#FFF3E0;color:#E65100}
+.badge-resolved{background:var(--green-l);color:var(--green)}
+.badge-open{background:var(--amber-l);color:var(--amber-d)}
+.lc-content{flex:1;min-width:0}
+.lc-title{font-weight:700;font-size:0.95rem;margin-bottom:3px;color:var(--text)}
+.lc-meta{font-size:0.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.lc-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.empty-state{text-align:center;padding:3rem;color:var(--muted)}
+.empty-state .es-icon{font-size:3rem;margin-bottom:0.75rem;opacity:0.4}
+
+.alert-banner{padding:14px 18px;border-radius:14px;margin-bottom:1.5rem;font-size:0.875rem;display:flex;align-items:flex-start;gap:10px;line-height:1.5;font-weight:600}
+.alert-emergency{background:var(--red-l);border:1.5px solid rgba(208,2,27,0.2);color:#8B0011}
+.alert-info{background:var(--green-l);border:1.5px solid rgba(13,122,85,0.2);color:var(--green)}
+.alert-amber{background:var(--amber-l);border:1.5px solid rgba(245,166,35,0.3);color:var(--amber-d)}
+
+.pill{padding:5px 14px;border-radius:50px;font-size:0.78rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--muted);transition:all 0.2s;font-family:'Nunito',sans-serif}
+.pill.active,.pill:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+.notif{position:fixed;bottom:24px;right:24px;background:var(--deep);color:#fff;padding:14px 18px;border-radius:14px;font-size:0.88rem;z-index:9999;transform:translateY(120px);opacity:0;transition:all 0.4s cubic-bezier(.175,.885,.32,1.275);border-left:4px solid var(--red);max-width:340px;box-shadow:0 12px 40px rgba(0,0,0,0.4);line-height:1.5;font-family:'Nunito',sans-serif;font-weight:600}
+.notif.show{transform:translateY(0);opacity:1}
+
+@media(max-width:768px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:auto}
+  .lc-actions{flex-direction:column}
+  .hamburger{display:flex}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/animal" class="logo"><span class="logo-icon">🆘</span>Animal SOS</a>
+  <a href="/animal" class="nav-back">&#8592; Back to Animal Help</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">🏠 Home</a>
+  <a href="/animal">🐾 Animal Help</a>
+  <a href="/animal-sos" class="active">🆘 Animal SOS</a>
+  <a href="/#volunteer">🙋 Volunteer</a>
+</div>
+
+<div class="page-hero">
+  <div class="ph-inner">
+    <div class="ph-text">
+      <div class="ph-tag">Emergency Services</div>
+      <h1>Animal SOS<br>Response Centre</h1>
+      <p>Fast, coordinated help for animals in distress — request rescue, find nearby vets, or report a case for volunteers.</p>
+    </div>
+    <div class="ph-emojis">
+      <span class="ph-emoji">🚨</span>
+      <span class="ph-emoji">🐾</span>
+      <span class="ph-emoji">🏥</span>
+    </div>
+  </div>
+</div>
+
+<div class="sos-cards-container">
+  <div class="sos-cards-grid">
+    <button class="sos-card active" onclick="showPanel('request',this)" data-name="request">
+      <div class="sos-card-icon">🚨</div>
+      <div class="sos-card-label">Request SOS</div>
+      <div class="sos-card-desc">Animal needs immediate rescue</div>
+    </button>
+    <button class="sos-card" onclick="showPanel('nearby',this)" data-name="nearby">
+      <div class="sos-card-icon">📍</div>
+      <div class="sos-card-label">Nearby Vets</div>
+      <div class="sos-card-desc">Find emergency vet clinics</div>
+    </button>
+    <button class="sos-card" onclick="showPanel('report',this)" data-name="report">
+      <div class="sos-card-icon">📸</div>
+      <div class="sos-card-label">Report a Case</div>
+      <div class="sos-card-desc">Volunteers can respond &amp; help</div>
+    </button>
+    <button class="sos-card" onclick="showPanel('volunteer',this)" data-name="volunteer">
+      <div class="sos-card-icon">🙋</div>
+      <div class="sos-card-label">I Can Help</div>
+      <div class="sos-card-desc">Register as SOS volunteer</div>
+    </button>
+  </div>
+</div>
+
+<main>
+
+<!-- REQUEST SOS PANEL -->
+<div class="sos-panel active" id="panel-request">
+  <div class="alert-banner alert-emergency">
+    🚨 For life-threatening emergencies call <strong>1962</strong> immediately. Use this form for urgent but non-critical rescues.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">🚨</div>
+      <div class="fc-head-text">
+        <h3>Request Animal Rescue</h3>
+        <p>Fill this form and our nearest rescue volunteer will respond within 20–30 minutes</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="sos-form" onsubmit="submitSOS(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="s-name" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Your Phone *</label><input required type="tel" id="s-phone" placeholder="We’ll call you" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Animal Type *</label>
+            <select required id="s-animal">
+              <option value="">Select animal</option>
+              <option>Dog</option><option>Cat</option><option>Bird</option>
+              <option>Cow / Buffalo</option><option>Monkey</option>
+              <option>Donkey / Horse</option><option>Snake</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Condition *</label>
+            <select required id="s-condition">
+              <option value="">Select condition</option>
+              <option>Injured / Bleeding</option>
+              <option>Sick / Lethargic</option>
+              <option>Trapped / Stuck</option>
+              <option>Hit by vehicle</option>
+              <option>Abandoned / Stray</option>
+              <option>Aggressive / Danger to public</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Number of Animals</label>
+            <select id="s-count">
+              <option>1 animal</option><option>2–3 animals</option>
+              <option>4–5 animals</option><option>6+ animals</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Urgency *</label>
+            <select id="s-urgency">
+              <option>Moderate — within 1–2 hours</option>
+              <option>Urgent — within 30 minutes</option>
+              <option>Emergency — immediate</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Exact Location *</label><input required type="text" id="s-location" placeholder="Landmark, street, area, city..."/></div>
+          <div class="form-group full"><label>Description</label><textarea id="s-desc" placeholder="Describe the animal’s condition, surroundings, any dangers nearby..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-sos">🚨 Send Rescue Team →</button>
+          <span style="font-size:0.8rem;color:var(--muted)">Avg response: 20–30 min</span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="listings-head">
+    <h3>Active SOS Requests</h3>
+    <div style="display:flex;gap:8px">
+      <span class="pill active" onclick="setSOSFilter('all',this)">All</span>
+      <span class="pill" onclick="setSOSFilter('active',this)">Active</span>
+      <span class="pill" onclick="setSOSFilter('resolved',this)">Resolved</span>
+    </div>
+  </div>
+  <div id="sos-list" class="cards-list"></div>
+</div>
+
+<!-- NEARBY VETS PANEL -->
+<div class="sos-panel" id="panel-nearby">
+  <div class="alert-banner alert-info">
+    🏥 Showing emergency veterinary clinics near you. Call directly for fastest response.
+  </div>
+
+  <div style="background:#fff;border-radius:20px;border:2px solid var(--border);overflow:hidden;margin-bottom:2rem;box-shadow:0 4px 16px rgba(208,2,27,0.06)">
+    <div style="padding:1.2rem 1.8rem;border-bottom:2px solid var(--border);background:var(--red-l);display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.5rem">🗺️</span>
+      <div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--text)">Live Map — Nearby Vets</div>
+        <div style="font-size:0.8rem;color:var(--muted);font-weight:600">Map integration ready — connect your Google Maps API key</div>
+      </div>
+    </div>
+    <div style="width:100%;height:320px;background:linear-gradient(135deg,#f0f4ff 0%,#e8f7f0 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;border-bottom:2px solid var(--border)">
+      <div style="font-size:4rem">🗺️</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--muted)">Map Placeholder</div>
+      <div style="font-size:0.85rem;color:var(--muted);font-weight:600;text-align:center;max-width:300px">Integrate Google Maps or Leaflet.js here to show live vet locations</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+        <span style="background:var(--red-l);color:var(--red);padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700">📍 Vet 1 — 0.8km</span>
+        <span style="background:var(--green-l);color:var(--green);padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700">📍 Vet 2 — 1.4km</span>
+        <span style="background:var(--amber-l);color:var(--amber-d);padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:700">📍 Vet 3 — 2.1km</span>
+      </div>
+    </div>
+    <div style="padding:1rem 1.8rem;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sos btn-sm" onclick="showNotif('🗺️ Opening maps...','#D0021B')">Open in Google Maps</button>
+      <button class="btn btn-outline btn-sm" onclick="showNotif('📍 Locating you...','#0D7A55')">Use My Location</button>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Emergency Vet Clinics</h3>
+  </div>
+  <div id="nearby-vet-list" class="vet-grid"></div>
+</div>
+
+<!-- REPORT A CASE PANEL -->
+<div class="sos-panel" id="panel-report">
+  <div class="alert-banner alert-amber">
+    📸 Spotted an animal in need? Report it here — nearby volunteers will see it and can respond.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">📸</div>
+      <div class="fc-head-text">
+        <h3>Report an Animal in Need</h3>
+        <p>Your report is visible to all registered SOS volunteers in your area</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="report-form" onsubmit="submitReport(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="rp-name" placeholder="Your name"/></div>
+          <div class="form-group"><label>Your Phone *</label><input required type="tel" id="rp-phone" placeholder="Contact number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Animal Type *</label>
+            <select required id="rp-animal">
+              <option value="">Select</option>
+              <option>Dog</option><option>Cat</option><option>Bird</option>
+              <option>Cow / Buffalo</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Situation *</label>
+            <select required id="rp-situation">
+              <option value="">Select</option>
+              <option>Injured on road</option>
+              <option>Starving / dehydrated</option>
+              <option>Abandoned / lost</option>
+              <option>Trapped / stuck</option>
+              <option>Sick / needs vet</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Location *</label><input required type="text" id="rp-location" placeholder="Landmark, area, city..."/></div>
+          <div class="form-group full"><label>Details</label><textarea id="rp-details" placeholder="Describe what you see so volunteers know what to expect..."></textarea></div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-sos">📸 Post Report →</button>
+          <span style="font-size:0.8rem;color:var(--muted)">Visible to all nearby volunteers</span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="listings-head">
+    <h3>Open Reports — Volunteers Needed</h3>
+    <div style="display:flex;gap:8px">
+      <span class="pill active" onclick="setRPFilter('all',this)">All</span>
+      <span class="pill" onclick="setRPFilter('open',this)">Open</span>
+      <span class="pill" onclick="setRPFilter('helped',this)">Helped</span>
+    </div>
+  </div>
+  <div id="report-list" class="cards-list"></div>
+</div>
+
+<!-- I CAN HELP PANEL -->
+<div class="sos-panel" id="panel-volunteer">
+  <div class="alert-banner alert-info">
+    🙋 Thank you for stepping up! Registered volunteers get notified of SOS cases in their area.
+  </div>
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">🙋</div>
+      <div class="fc-head-text">
+        <h3>Register as SOS Volunteer</h3>
+        <p>Get notified of animal emergencies near you and help when you can</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="vol-form" onsubmit="submitVolunteer(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input required type="text" id="v-name" placeholder="Your name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="v-phone" placeholder="Contact" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Your City / Area *</label><input required type="text" id="v-area" placeholder="e.g. Ranchi, Jharkhand"/></div>
+          <div class="form-group"><label>How Can You Help?</label>
+            <select id="v-help">
+              <option>Transport injured animals</option>
+              <option>First aid / basic care</option>
+              <option>Connect to vet</option>
+              <option>Foster temporarily</option>
+              <option>All of the above</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Availability</label><input type="text" id="v-avail" placeholder="e.g. Evenings, Weekends, Anytime"/></div>
+          <div class="form-group"><label>Have a Vehicle?</label>
+            <select id="v-vehicle">
+              <option>Yes — can transport animals</option>
+              <option>No vehicle</option>
+              <option>Two-wheeler only</option>
+            </select>
+          </div>
+        </div>
+        <div class="submit-row" style="margin-top:1.2rem">
+          <button type="submit" class="btn btn-green">🙋 Register as Volunteer →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="listings-head">
+    <h3>Active SOS Volunteers</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadVolunteers()">🔄 Refresh</button>
+  </div>
+  <div id="volunteer-list" class="cards-list"></div>
+</div>
+
+</main>
+
+<div class="notif" id="notif"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+function gv(id){const el=document.getElementById(id);return el?el.value:'';}
+
+function toggleMenu(){$('mobile-menu').classList.toggle('open');}
+
+function showNotif(msg,color){
+  const n=$('notif');
+  n.innerHTML=msg;
+  n.style.borderLeftColor=color||'var(--red)';
+  n.classList.add('show');
+  clearTimeout(n._t);
+  n._t=setTimeout(()=>n.classList.remove('show'),4500);
+}
+
+function showPanel(name,btn){
+  document.querySelectorAll('.sos-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sos-card').forEach(c=>c.classList.remove('active'));
+  $('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:document.querySelector('.sos-cards-container').offsetTop-68,behavior:'smooth'});
+  if(name==='request') loadSOS();
+  if(name==='nearby') renderNearbyVets();
+  if(name==='report') loadReports();
+  if(name==='volunteer') loadVolunteers();
+}
+
+function getStore(key){try{return JSON.parse(localStorage.getItem('hc_sos_'+key)||'[]');}catch(e){return [];}}
+function setStore(key,data){localStorage.setItem('hc_sos_'+key,JSON.stringify(data));}
+function addToStore(key,item){const d=getStore(key);d.unshift(item);setStore(key,d);}
+
+function fmtTime(ts){
+  const d=new Date(ts),now=new Date(),diff=(now-d)/1000;
+  if(diff<60)return 'just now';
+  if(diff<3600)return Math.floor(diff/60)+' min ago';
+  if(diff<86400)return Math.floor(diff/3600)+' hr ago';
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+}
+
+// ===== REQUEST SOS =====
+let sosFilter='all';
+function submitSOS(e){
+  e.preventDefault();
+  const name=gv('s-name'),phone=gv('s-phone'),animal=gv('s-animal'),condition=gv('s-condition'),location=gv('s-location');
+  if(!name||!phone||!animal||!condition||!location){showNotif('⚠️ Fill all required fields.','#E67E22');return;}
+  addToStore('requests',{id:Date.now(),name,phone,animal,condition,count:gv('s-count'),urgency:gv('s-urgency'),location,desc:gv('s-desc'),status:'Active',ts:Date.now()});
+  $('sos-form').reset();
+  loadSOS();
+  showNotif('🚨 SOS sent! Rescue team dispatched. ETA 20–30 min. Stay near the animal if safe.','#D0021B');
+}
+function loadSOS(){
+  let data=getStore('requests');
+  if(sosFilter==='active') data=data.filter(r=>r.status==='Active');
+  if(sosFilter==='resolved') data=data.filter(r=>r.status==='Resolved');
+  const el=$('sos-list');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">🆘</div><p>No active SOS requests.</p></div>';return;}
+  el.innerHTML=data.map(r=>`
+    <div class="listing-card">
+      <div><div class="lc-badge ${r.status==='Resolved'?'badge-resolved':r.urgency.includes('Emergency')?'badge-emergency':'badge-active'}">${r.status}</div></div>
+      <div class="lc-content">
+        <div class="lc-title">${r.animal} — ${r.condition}</div>
+        <div class="lc-meta"><span>📍 ${r.location}</span><span>👤 ${r.name}</span><span>📞 ${r.phone}</span><span>🎯 ${r.urgency}</span><span>🕐 ${fmtTime(r.ts)}</span></div>
+        ${r.desc?`<div style="font-size:0.82rem;color:var(--muted);margin-top:5px">${r.desc}</div>`:''}
+      </div>
+      <div class="lc-actions">
+        ${r.status!=='Resolved'?`<button class="btn btn-success btn-sm" onclick="resolveSOSReq(${r.id})">✓ Rescued</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="delSOSReq(${r.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function resolveSOSReq(id){const d=getStore('requests');const i=d.findIndex(r=>r.id===id);if(i>-1){d[i].status='Resolved';setStore('requests',d);loadSOS();showNotif('✅ Marked as rescued!','#0D7A55');}}
+function delSOSReq(id){if(!confirm('Remove?'))return;setStore('requests',getStore('requests').filter(r=>r.id!==id));loadSOS();}
+function setSOSFilter(f,el){sosFilter=f;document.querySelectorAll('#panel-request .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');loadSOS();}
+
+// ===== NEARBY VETS =====
+const VET_DATA=[
+  {id:1,name:'City Animal Hospital',icon:'🏥',tags:'24h · Surgery',phone:'0651-111111',hours:'24 hours',dist:'0.8 km',rating:'4.9',open:true},
+  {id:2,name:'Prani Mitra Emergency Vet',icon:'🚑',tags:'24h · Critical Care',phone:'0651-555555',hours:'24 hours',dist:'1.2 km',rating:'4.6',open:true},
+  {id:3,name:'Dr. Sharma Veterinary Clinic',icon:'🩺',tags:'Private',phone:'0651-222222',hours:'9 AM – 7 PM',dist:'1.4 km',rating:'4.7',open:false},
+  {id:4,name:'Govt. Veterinary Hospital',icon:'🏛️',tags:'Government · Free',phone:'0651-333333',hours:'8 AM – 4 PM',dist:'2.1 km',rating:'4.2',open:false},
+  {id:5,name:'Green Paws Animal Care',icon:'🐾',tags:'Private · Surgery',phone:'0651-444444',hours:'9 AM – 8 PM',dist:'2.8 km',rating:'4.8',open:false},
+];
+function renderNearbyVets(){
+  const el=$('nearby-vet-list');
+  el.innerHTML=VET_DATA.map(v=>`
+    <div class="vet-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.8rem">${v.icon}</span>
+        <div>
+          <h4>${v.name}</h4>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <span style="font-size:0.72rem;background:var(--red-l);color:var(--red);padding:2px 8px;border-radius:50px;font-weight:800">${v.tags}</span>
+            <span style="font-size:0.72rem;background:${v.open?'var(--green-l)':'var(--red-l)'};color:${v.open?'var(--green)':'var(--red)'};padding:2px 8px;border-radius:50px;font-weight:800">${v.open?'Open Now':'Closed'}</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:0.8rem;color:var(--muted);display:flex;flex-direction:column;gap:3px;margin-bottom:0.75rem">
+        <span>📍 ${v.dist} away</span><span>🕐 ${v.hours}</span><span>⭐ ${v.rating}/5</span><span>📞 ${v.phone}</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <a href="tel:${v.phone}" class="btn btn-sos btn-sm" style="text-decoration:none">📞 Call Now</a>
+        <button class="btn btn-outline btn-sm" onclick="showNotif('🗺️ Opening directions to ${v.name}...','#0D7A55')">🗺️ Directions</button>
+      </div>
+    </div>`).join('');
+}
+
+// ===== REPORT A CASE =====
+let rpFilter='all';
+function submitReport(e){
+  e.preventDefault();
+  const name=gv('rp-name'),phone=gv('rp-phone'),animal=gv('rp-animal'),situation=gv('rp-situation'),location=gv('rp-location');
+  if(!name||!phone||!animal||!situation||!location){showNotif('⚠️ Fill all required fields.','#E67E22');return;}
+  addToStore('reports',{id:Date.now(),name,phone,animal,situation,location,details:gv('rp-details'),status:'Open',helpers:[],ts:Date.now()});
+  $('report-form').reset();
+  loadReports();
+  showNotif('📸 Report posted! Nearby volunteers have been notified.','#0D7A55');
+}
+function loadReports(){
+  let data=getStore('reports');
+  if(rpFilter==='open') data=data.filter(r=>r.status==='Open');
+  if(rpFilter==='helped') data=data.filter(r=>r.status==='Helped');
+  const el=$('report-list');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">📸</div><p>No reports yet. Be the first to report!</p></div>';return;}
+  el.innerHTML=data.map(r=>`
+    <div class="listing-card">
+      <div><div class="lc-badge ${r.status==='Helped'?'badge-resolved':'badge-emergency'}">${r.status}</div></div>
+      <div class="lc-content">
+        <div class="lc-title">${r.animal} — ${r.situation}</div>
+        <div class="lc-meta"><span>📍 ${r.location}</span><span>👤 ${r.name}</span><span>📞 ${r.phone}</span><span>🕐 ${fmtTime(r.ts)}</span></div>
+        ${r.details?`<div style="font-size:0.82rem;color:var(--muted);margin-top:5px">${r.details}</div>`:''}
+        <div style="font-size:0.8rem;color:var(--green);margin-top:6px;font-weight:700">${r.helpers&&r.helpers.length?'🙋 '+r.helpers.length+' volunteer(s) responding':''}</div>
+      </div>
+      <div class="lc-actions">
+        ${r.status==='Open'?`<button class="btn btn-green btn-sm" onclick="respondToReport(${r.id})">🙋 I'll Help</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="delReport(${r.id})">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function respondToReport(id){
+  const d=getStore('reports');const i=d.findIndex(r=>r.id===id);
+  if(i>-1){d[i].helpers=d[i].helpers||[];d[i].helpers.push('You');d[i].status='Helped';setStore('reports',d);loadReports();showNotif('🙋 Thank you! You are now responding to this case.','#0D7A55');}
+}
+function delReport(id){setStore('reports',getStore('reports').filter(r=>r.id!==id));loadReports();}
+function setRPFilter(f,el){rpFilter=f;document.querySelectorAll('#panel-report .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');loadReports();}
+
+// ===== VOLUNTEERS =====
+function submitVolunteer(e){
+  e.preventDefault();
+  const name=gv('v-name'),phone=gv('v-phone'),area=gv('v-area');
+  if(!name||!phone||!area){showNotif('⚠️ Fill all required fields.','#E67E22');return;}
+  addToStore('volunteers',{id:Date.now(),name,phone,area,help:gv('v-help'),avail:gv('v-avail'),vehicle:gv('v-vehicle'),ts:Date.now()});
+  $('vol-form').reset();
+  loadVolunteers();
+  showNotif('🙋 Welcome aboard! You are now a registered SOS volunteer.','#0D7A55');
+}
+function loadVolunteers(){
+  const data=getStore('volunteers');
+  const el=$('volunteer-list');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">🙋</div><p>No volunteers yet. Be the first!</p></div>';return;}
+  el.innerHTML=data.map(v=>`
+    <div class="listing-card">
+      <div class="lc-badge badge-resolved">Active</div>
+      <div class="lc-content">
+        <div class="lc-title">${v.name} — ${v.area}</div>
+        <div class="lc-meta"><span>📞 ${v.phone}</span><span>🚗 ${v.vehicle}</span><span>🕐 ${v.avail||'Flexible'}</span><span>🤝 ${v.help}</span></div>
+      </div>
+      <div class="lc-actions">
+        <button class="btn btn-sos btn-sm" onclick="showNotif('📞 Connecting to ${v.name}...','#D0021B')">📞 Contact</button>
+      </div>
+    </div>`).join('');
+}
+
+window.onload=()=>{ loadSOS(); };
+</script>
+</body>
+</html>

@@ -4,13 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Human Help — HopeConnect</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/css/human.css">
 </head>
 <body>
 
 <nav>
-  <a href="/" class="logo">Hope<span>Connect</span></a>
+  <a href="/" class="logo"><span class="logo-icon">🤝</span>HopeConnect</a>
   <button class="nav-back" onclick="history.length>1?history.back():window.location.href='/'" title="Go back">&#8592; Back</button>
   <div class="nav-right">
     <div class="nav-search">
@@ -35,9 +35,16 @@
 
 <div class="page-hero">
   <div class="ph-inner">
-    <div class="ph-tag">Human Help</div>
-    <h1>Support for<br>Every Person</h1>
-    <p>From specially-abled individuals to those facing homelessness — we connect every person to the right resource, right when they need it.</p>
+    <div class="ph-text">
+      <div class="ph-tag">Human Help</div>
+      <h1>Support for<br>Every Person</h1>
+      <p>From specially-abled individuals to those facing homelessness — we connect every person to the right resource, right when they need it.</p>
+    </div>
+    <div class="ph-pets">
+      <span class="ph-pet">🤝</span>
+      <span class="ph-pet">🏠</span>
+      <span class="ph-pet">❤️</span>
+    </div>
   </div>
 </div>
 
@@ -138,7 +145,7 @@
         </div>
         <div class="submit-row" style="margin-top:1.2rem">
           <button type="submit" class="btn btn-human">Submit Request →</button>
-          <span style="font-size:0.8rem;color:var(--gray)">We'll call you within 2 hours</span>
+          <span style="font-size:0.8rem;color:var(--muted)">We'll call you within 2 hours</span>
         </div>
       </form>
     </div>
@@ -202,7 +209,7 @@
         </div>
         <div class="submit-row" style="margin-top:1.2rem">
           <button type="submit" class="btn btn-human">Find Nearest Shelter →</button>
-          <span style="font-size:0.8rem;color:var(--gray)">Nearest shelter shown immediately</span>
+          <span style="font-size:0.8rem;color:var(--muted)">Nearest shelter shown immediately</span>
         </div>
       </form>
     </div>
@@ -374,7 +381,7 @@
         </div>
         <div class="submit-row" style="margin-top:1.2rem">
           <button type="submit" class="btn btn-human">Post Question →</button>
-          <span style="font-size:0.8rem;color:var(--gray)">Answered within 24 hours</span>
+          <span style="font-size:0.8rem;color:var(--muted)">Answered within 24 hours</span>
         </div>
       </form>
     </div>
