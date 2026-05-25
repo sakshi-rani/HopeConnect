@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Find Vet — HopeConnect</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --amber:#F5A623;--amber-d:#D4880B;--amber-l:#FFF3D6;
+  --red:#D0021B;--red-l:#FDE8EB;
+  --green:#0D7A55;--green-l:#E8F7F0;
+  --cream:#FFFDF5;--white:#fff;
+  --text:#1A1A1A;--muted:#6B7280;--border:#EAD9A8;
+  --deep:#0A1628;--gold:#C9952A;
+  --nav-h:68px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;background:var(--amber);height:var(--nav-h);display:flex;align-items:center;padding:0 5%;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.12)}
+.logo{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-icon{font-size:1.8rem;animation:logoBounce 3s ease-in-out infinite;display:inline-block}
+@keyframes logoBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.nav-back{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.4);color:#fff;padding:6px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.nav-back:hover{background:rgba(255,255,255,0.35)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px;display:block}
+.mobile-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:var(--amber);z-index:499;flex-direction:column;padding:12px 5% 20px;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,0.15)}
+.mobile-menu.open{display:flex}
+.mobile-menu a{padding:10px 14px;border-radius:50px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.92rem;color:#fff;text-decoration:none}
+
+/* HERO */
+.page-hero{background:var(--amber);padding:48px 5% 0;position:relative;overflow:hidden;margin-top:var(--nav-h)}
+.page-hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:60px;background:var(--cream);border-radius:50% 50% 0 0/60px 60px 0 0}
+.ph-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between}
+.ph-text{padding-bottom:56px}
+.ph-tag{display:inline-block;background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.4);color:#fff;padding:5px 14px;border-radius:50px;font-size:0.75rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.ph-inner h1{font-family:'Fredoka One',cursive;color:#fff;font-size:clamp(2rem,4vw,3.2rem);text-shadow:2px 3px 0 rgba(0,0,0,0.12);line-height:1.1;margin-bottom:6px}
+.ph-inner p{color:rgba(255,255,255,0.9);font-size:1rem;line-height:1.5;max-width:420px;font-weight:600}
+.ph-pets{display:flex;gap:8px;align-items:flex-end;padding-bottom:10px}
+.ph-pet{display:inline-block;font-size:3.5rem;animation:petBounce 2.5s ease-in-out infinite}
+.ph-pet:nth-child(2){animation-delay:0.4s}
+.ph-pet:nth-child(3){animation-delay:0.8s}
+@keyframes petBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+/* TABS */
+.tabs-grid-container{background:#fff;border-bottom:2px solid var(--border);padding:1.5rem 5%;position:sticky;top:var(--nav-h);z-index:100}
+.tabs-grid{display:flex;gap:0.6rem;max-width:1200px;margin:0 auto;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tabs-grid::-webkit-scrollbar{display:none}
+.tab-card{background:#fff;border:2px solid var(--border);border-radius:16px;padding:0.9rem 1.2rem;cursor:pointer;transition:all 0.3s;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:8px;white-space:nowrap;text-decoration:none;color:inherit;flex-shrink:0}
+.tab-card:hover{border-color:var(--amber);box-shadow:0 4px 16px rgba(245,166,35,0.2);transform:translateY(-2px)}
+.tab-card.active{background:linear-gradient(135deg,var(--amber),var(--amber-d));color:#fff;border-color:var(--amber);box-shadow:0 6px 20px rgba(245,166,35,0.35)}
+.tab-icon{font-size:1.3rem}
+.tab-label{font-family:'Fredoka One',cursive;font-size:0.9rem}
+
+/* MAIN */
+main{max-width:1200px;margin:0 auto;padding:2rem 5%}
+.section-panel{display:none}
+.section-panel.active{display:block;animation:panelIn 0.35s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* COMMON COMPONENTS */
+.form-card{background:#fff;border-radius:20px;border:2px solid var(--border);overflow:hidden;margin-bottom:2rem;box-shadow:0 4px 16px rgba(201,149,42,0.08)}
+.fc-head{padding:1.4rem 1.8rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:14px;background:var(--amber-l)}
+.fc-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;background:var(--amber)}
+.fc-head-text h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--text)}
+.fc-head-text p{font-size:0.82rem;color:var(--muted);margin-top:2px;font-weight:600}
+.fc-body{padding:1.8rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:0.8rem;font-weight:800;color:var(--text);letter-spacing:0.3px}
+.form-group input,.form-group select,.form-group textarea{padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Nunito',sans-serif;font-size:0.9rem;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:#fff}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,166,35,0.12)}
+.form-group textarea{resize:vertical;min-height:80px}
+.submit-row{display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap}
+
+.btn{padding:10px 22px;border-radius:50px;font-weight:700;font-size:0.88rem;cursor:pointer;border:none;transition:all 0.25s;font-family:'Nunito',sans-serif;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+.btn-amber{background:var(--amber);color:#fff}
+.btn-amber:hover{background:var(--amber-d);transform:translateY(-1px);box-shadow:0 6px 18px rgba(245,166,35,0.35)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
+.btn-outline:hover{border-color:var(--amber);color:var(--amber-d)}
+.btn-sm{padding:7px 14px;font-size:0.78rem}
+.btn-danger{background:#FEE8E8;color:var(--red);border:none}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-success{background:var(--green-l);color:var(--green);border:none}
+.btn-success:hover{background:var(--green);color:#fff}
+.btn-red{background:var(--red);color:#fff;border:none}
+.btn-red:hover{background:#a80016}
+
+.alert-banner{padding:14px 18px;border-radius:14px;margin-bottom:1.2rem;font-size:0.875rem;display:flex;align-items:flex-start;gap:10px;line-height:1.5;font-weight:600}
+.alert-emergency{background:var(--red-l);border:1.5px solid rgba(208,2,27,0.2);color:#8B0011}
+.alert-info{background:var(--green-l);border:1.5px solid rgba(13,122,85,0.2);color:var(--green)}
+.alert-warn{background:var(--amber-l);border:1.5px solid rgba(245,166,35,0.3);color:var(--amber-d)}
+
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem}
+.pill{padding:5px 14px;border-radius:50px;font-size:0.78rem;font-weight:700;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--muted);transition:all 0.2s;font-family:'Nunito',sans-serif}
+.pill.active,.pill:hover{background:var(--amber);color:#fff;border-color:var(--amber)}
+
+.listings-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem}
+.listings-head h3{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--text)}
+.cards-list{display:flex;flex-direction:column;gap:0.8rem}
+.listing-card{background:#fff;border-radius:16px;border:2px solid var(--border);padding:1.2rem 1.4rem;display:flex;align-items:flex-start;gap:1rem;transition:all 0.2s}
+.listing-card:hover{box-shadow:0 6px 20px rgba(201,149,42,0.12);border-color:var(--amber)}
+.lc-badge{flex-shrink:0;padding:4px 12px;border-radius:50px;font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.badge-emergency{background:var(--red-l);color:var(--red)}
+.badge-active{background:#FFF3E0;color:#E65100}
+.badge-resolved{background:var(--green-l);color:var(--green)}
+.badge-open{background:var(--amber-l);color:var(--amber-d)}
+.lc-content{flex:1;min-width:0}
+.lc-title{font-weight:700;font-size:0.95rem;margin-bottom:3px;color:var(--text)}
+.lc-meta{font-size:0.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.lc-actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.empty-state{text-align:center;padding:3rem;color:var(--muted)}
+.empty-state .es-icon{font-size:3rem;margin-bottom:0.75rem;opacity:0.4}
+
+.vet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.vet-card{background:#fff;border-radius:20px;border:2px solid var(--border);padding:1.4rem;transition:all 0.2s;cursor:pointer}
+.vet-card:hover{box-shadow:0 8px 24px rgba(201,149,42,0.15);transform:translateY(-3px);border-color:var(--amber)}
+.vet-card h4{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:4px;color:var(--text)}
+.vet-tag{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:800;padding:3px 10px;border-radius:50px;display:inline-block;margin-bottom:0.5rem;background:var(--amber-l);color:var(--amber-d)}
+.vet-meta{font-size:0.8rem;color:var(--muted);margin-bottom:0.75rem;display:flex;flex-direction:column;gap:3px}
+.open-now{font-size:0.72rem;color:var(--green);font-weight:800;background:var(--green-l);padding:2px 8px;border-radius:50px;display:inline-block;margin-left:6px}
+.closed-now{font-size:0.72rem;color:var(--red);font-weight:800;background:var(--red-l);padding:2px 8px;border-radius:50px;display:inline-block;margin-left:6px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(5,12,25,0.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity 0.3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:24px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative;transform:translateY(30px) scale(0.97);transition:all 0.35s cubic-bezier(.175,.885,.32,1.1)}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-head{padding:1.4rem 1.8rem;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--border);background:var(--amber-l)}
+.modal-head h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--text)}
+.modal-close{background:rgba(0,0,0,0.08);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s}
+.modal-close:hover{background:var(--amber);color:#fff}
+.modal-body{padding:1.4rem 1.8rem 1.8rem}
+.modal-sub{font-size:0.85rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.6;font-weight:600}
+
+/* NOTIF */
+.notif{position:fixed;bottom:24px;right:24px;background:var(--deep);color:#fff;padding:14px 18px;border-radius:14px;font-size:0.88rem;z-index:9999;transform:translateY(120px);opacity:0;transition:all 0.4s cubic-bezier(.175,.885,.32,1.275);border-left:4px solid var(--amber);max-width:340px;box-shadow:0 12px 40px rgba(0,0,0,0.4);line-height:1.5;font-family:'Nunito',sans-serif;font-weight:600}
+.notif.show{transform:translateY(0);opacity:1}
+
+/* EMERGENCY BUTTON */
+.emergency-fab{position:fixed;bottom:90px;right:24px;z-index:600;background:var(--red);color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:0 8px 28px rgba(208,2,27,0.45);animation:fabPulse 2s ease infinite;display:flex;align-items:center;gap:8px;transition:transform 0.2s}
+.emergency-fab:hover{transform:scale(1.05)}
+@keyframes fabPulse{0%,100%{box-shadow:0 8px 28px rgba(208,2,27,0.45)}50%{box-shadow:0 8px 40px rgba(208,2,27,0.7)}}
+
+/* MAP */
+#rescue-map{height:420px;border-radius:16px;border:2px solid var(--border);overflow:hidden;margin-bottom:1.5rem}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:14px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border)}
+.tl-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;border:2px solid var(--border);background:#fff;z-index:1}
+.tl-dot.done{background:var(--green);border-color:var(--green);color:#fff}
+.tl-dot.active{background:var(--amber);border-color:var(--amber);color:#fff;animation:tlPulse 1.5s ease infinite}
+@keyframes tlPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,0.4)}70%{box-shadow:0 0 0 8px rgba(245,166,35,0)}}
+.tl-content{padding:4px 0 20px}
+.tl-label{font-weight:700;font-size:0.88rem;color:var(--text)}
+.tl-time{font-size:0.75rem;color:var(--muted);margin-top:2px}
+
+/* SYMPTOM CHECKER */
+.ai-card{background:linear-gradient(135deg,#0A1628,#1B3A6B);border-radius:20px;padding:2rem;color:#fff;margin-bottom:2rem}
+.ai-card h3{font-family:'Fredoka One',cursive;font-size:1.3rem;margin-bottom:0.5rem;color:#F0CC80}
+.ai-card p{font-size:0.85rem;color:rgba(255,255,255,0.65);margin-bottom:1.2rem}
+.ai-input-row{display:flex;gap:0.75rem;flex-wrap:wrap}
+.ai-input{flex:1;min-width:200px;padding:11px 16px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:#fff;font-family:'Nunito',sans-serif;font-size:0.9rem;outline:none}
+.ai-input:focus{border-color:var(--amber)}
+.ai-input::placeholder{color:rgba(255,255,255,0.35)}
+.ai-result{margin-top:1.2rem;background:rgba(255,255,255,0.08);border-radius:14px;padding:1.2rem;display:none}
+.ai-result.show{display:block;animation:panelIn 0.3s ease}
+.ai-result-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem}
+.ai-chip{background:rgba(255,255,255,0.1);border-radius:10px;padding:0.75rem;font-size:0.82rem}
+.ai-chip strong{display:block;color:#F0CC80;margin-bottom:3px;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px}
+
+/* AMBULANCE CARD */
+.amb-card{background:#fff;border-radius:20px;border:2px solid var(--border);padding:1.5rem;display:flex;gap:1.2rem;align-items:flex-start;margin-bottom:1rem;transition:all 0.2s}
+.amb-card:hover{border-color:var(--amber);box-shadow:0 6px 20px rgba(245,166,35,0.12)}
+.amb-icon{width:56px;height:56px;border-radius:16px;background:var(--red-l);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0}
+.amb-info h4{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--text);margin-bottom:4px}
+.amb-meta{font-size:0.8rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px;margin-bottom:0.75rem}
+.eta-badge{background:var(--red-l);color:var(--red);padding:3px 10px;border-radius:50px;font-size:0.75rem;font-weight:800}
+
+/* VOLUNTEER STATUS */
+.vol-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:800}
+.status-available{background:#E8F7F0;color:var(--green)}
+.status-busy{background:#FFF3E0;color:#E65100}
+.status-offline{background:#F3F4F6;color:#6B7280}
+
+/* MEDICAL RECORD CARD */
+.record-card{background:#fff;border-radius:20px;border:2px solid var(--border);overflow:hidden;margin-bottom:1rem}
+.record-head{background:var(--amber-l);padding:1rem 1.4rem;display:flex;align-items:center;justify-content:space-between}
+.record-head h4{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--text)}
+.record-body{padding:1.2rem 1.4rem}
+.record-section{margin-bottom:1rem}
+.record-section h5{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:0.5rem}
+.record-tag{display:inline-block;background:var(--amber-l);color:var(--amber-d);padding:3px 10px;border-radius:50px;font-size:0.75rem;font-weight:700;margin:2px}
+
+/* ANIMAL DETECT */
+.detect-zone{border:2px dashed var(--border);border-radius:16px;padding:2.5rem;text-align:center;cursor:pointer;transition:all 0.2s;background:#fff}
+.detect-zone:hover{border-color:var(--amber);background:var(--amber-l)}
+.detect-zone.dragging{border-color:var(--amber);background:var(--amber-l)}
+.detect-result{background:var(--amber-l);border-radius:14px;padding:1.2rem;margin-top:1rem;display:none}
+.detect-result.show{display:block;animation:panelIn 0.3s ease}
+
+/* SECTION DIVIDER */
+.section-divider{display:flex;align-items:center;gap:1rem;margin:2rem 0 1.5rem}
+.section-divider h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--text);white-space:nowrap}
+.section-divider::after{content:'';flex:1;height:2px;background:var(--border)}
+
+@media(max-width:768px){
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:auto}
+  .vet-grid{grid-template-columns:1fr}
+  .hamburger{display:flex}
+  .ai-result-row{grid-template-columns:1fr}
+  .amb-card{flex-direction:column}
+  .lc-actions{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><span class="logo-icon">🐾</span>HopeConnect</a>
+  <a href="/animal" class="nav-back">← Animal Help</a>
+  <div class="hamburger" onclick="document.getElementById('mob-menu').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mob-menu">
+  <a href="/">🏠 Home</a>
+  <a href="/animal">🐾 Animal Help</a>
+  <a href="/find-vet" class="active">🏥 Find Vet</a>
+</div>
+
+<div class="page-hero">
+  <div class="ph-inner">
+    <div class="ph-text">
+      <div class="ph-tag">Find Vet</div>
+      <h1>Advanced Vet &amp;<br>Rescue Centre</h1>
+      <p>Emergency rescue, live map, AI symptom checker, ambulance, medical records &amp; smart booking — all in one place.</p>
+    </div>
+    <div class="ph-pets">
+      <span class="ph-pet">🐕</span>
+      <span class="ph-pet">🏥</span>
+      <span class="ph-pet">🚑</span>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-grid-container">
+  <div class="tabs-grid" id="tabs-grid">
+    <button class="tab-card active" onclick="showTab('booking',this)"><span class="tab-icon">📅</span><span class="tab-label">Book Appointment</span></button>
+    <button class="tab-card" onclick="showTab('map',this)"><span class="tab-icon">🗺️</span><span class="tab-label">Live Rescue Map</span></button>
+    <button class="tab-card" onclick="showTab('emergency',this)"><span class="tab-icon">🚨</span><span class="tab-label">Emergency Rescue</span></button>
+    <button class="tab-card" onclick="showTab('ambulance',this)"><span class="tab-icon">🚑</span><span class="tab-label">Ambulance</span></button>
+    <button class="tab-card" onclick="showTab('volunteer',this)"><span class="tab-icon">👨‍⚕️</span><span class="tab-label">Volunteers</span></button>
+    <button class="tab-card" onclick="showTab('ai',this)"><span class="tab-icon">🤖</span><span class="tab-label">AI Symptom Checker</span></button>
+    <button class="tab-card" onclick="showTab('detect',this)"><span class="tab-icon">📸</span><span class="tab-label">Animal Detection</span></button>
+    <button class="tab-card" onclick="showTab('records',this)"><span class="tab-icon">🧾</span><span class="tab-label">Medical Records</span></button>
+  </div>
+</div>
+
+<main>
+
+<!-- ===== BOOKING ===== -->
+<div class="section-panel active" id="panel-booking">
+  <div class="alert-banner alert-emergency">
+    🚨 For life-threatening emergencies call <strong>1962</strong> immediately. Use Emergency Rescue tab for urgent cases.
+  </div>
+
+  <!-- Normal Booking -->
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">📅</div>
+      <div class="fc-head-text">
+        <h3>Book a Vet Appointment</h3>
+        <p>Choose hospital, doctor and slot — normal or emergency booking</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="booking-form" onsubmit="submitBooking(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Owner Name *</label><input required type="text" id="b-owner" placeholder="Your full name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="b-phone" placeholder="10-digit number" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Pet Name</label><input type="text" id="b-petname" placeholder="Your pet's name"/></div>
+          <div class="form-group"><label>Animal Type *</label>
+            <select required id="b-animal">
+              <option value="">Select</option>
+              <option>Dog</option><option>Cat</option><option>Bird</option>
+              <option>Rabbit</option><option>Cow</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Visit Type *</label>
+            <select required id="b-type">
+              <option value="">Select</option>
+              <option>General Check-up</option><option>Vaccination</option>
+              <option>Surgery / Operation</option><option>Deworming</option>
+              <option>Dental Care</option><option>Emergency Treatment</option>
+              <option>Neutering / Spaying</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Hospital *</label>
+            <select required id="b-hospital">
+              <option value="">Select hospital</option>
+              <option>City Animal Hospital</option>
+              <option>Dr. Sharma Veterinary Clinic</option>
+              <option>Green Paws Animal Care</option>
+              <option>Prani Mitra Emergency Vet</option>
+              <option>Govt. Veterinary Hospital</option>
+              <option>Happy Pets Clinic</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Preferred Date</label><input type="date" id="b-date"/></div>
+          <div class="form-group"><label>Preferred Slot</label>
+            <select id="b-slot">
+              <option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option>
+              <option>12:00 PM</option><option>2:00 PM</option><option>3:00 PM</option>
+              <option>4:00 PM</option><option>5:00 PM</option>
+            </select>
+          </div>
+          <div class="form-group full"><label>Symptoms / Reason</label><textarea id="b-symptoms" placeholder="Describe the issue..."></textarea></div>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-amber">📅 Book Normal Appointment →</button>
+          <button type="button" class="btn btn-danger" onclick="submitEmergencyBooking()">🚨 Emergency Booking (Skip Queue)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Live Slots -->
+  <div class="section-divider"><h3>Live Available Slots</h3></div>
+  <div class="vet-grid" id="slots-grid"></div>
+
+  <!-- My Appointments -->
+  <div class="listings-head" style="margin-top:2rem">
+    <h3>My Appointments</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadAppointments()">🔄 Refresh</button>
+  </div>
+  <div id="appt-list" class="cards-list"></div>
+</div>
+
+<!-- ===== MAP ===== -->
+<div class="section-panel" id="panel-map">
+  <div class="alert-banner alert-info">
+    🗺️ Map shows nearby vets, NGOs, volunteers and ambulances. Click any marker for details.
+  </div>
+
+  <div class="filter-pills" id="map-filters">
+    <span class="pill active" onclick="setMapFilter('all',this)">All</span>
+    <span class="pill" onclick="setMapFilter('vet',this)">🏥 Vet Clinics</span>
+    <span class="pill" onclick="setMapFilter('emergency',this)">🔴 Emergency</span>
+    <span class="pill" onclick="setMapFilter('ngo',this)">🟡 NGOs</span>
+    <span class="pill" onclick="setMapFilter('volunteer',this)">🟢 Volunteers</span>
+    <span class="pill" onclick="setMapFilter('ambulance',this)">🔵 Ambulance</span>
+    <span class="pill" onclick="setMapFilter('open',this)">Open Now</span>
+    <span class="pill" onclick="setMapFilter('24h',this)">24/7</span>
+  </div>
+
+  <div id="rescue-map"></div>
+
+  <div class="vet-grid" id="map-cards"></div>
+</div>
+
+<!-- ===== EMERGENCY RESCUE ===== -->
+<div class="section-panel" id="panel-emergency">
+  <div class="alert-banner alert-emergency">
+    🚨 Use this for animals in immediate danger. Our team responds within 20–30 minutes.
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon" style="background:var(--red)">🚨</div>
+      <div class="fc-head-text">
+        <h3>Save An Animal — Emergency Report</h3>
+        <p>Auto-detects your location • Upload photo/video • Nearest help dispatched instantly</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="rescue-form" onsubmit="submitRescue(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="er-name" placeholder="Full name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="er-phone" placeholder="10-digit" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Animal Type</label>
+            <select id="er-animal">
+              <option>Dog</option><option>Cat</option><option>Cow / Buffalo</option>
+              <option>Bird</option><option>Monkey</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Injury Condition *</label>
+            <select required id="er-condition">
+              <option value="">Select condition</option>
+              <option value="bleeding">🩸 Bleeding</option>
+              <option value="fracture">🦴 Fracture</option>
+              <option value="unconscious">😵 Unconscious</option>
+              <option value="trapped">🪤 Trapped</option>
+              <option value="accident">🚗 Accident</option>
+              <option value="breathing">😮‍💨 Breathing Issue</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Location *</label>
+            <div style="display:flex;gap:8px">
+              <input required type="text" id="er-location" placeholder="Landmark, street, area..." style="flex:1"/>
+              <button type="button" class="btn btn-amber btn-sm" onclick="detectLocation()">📍 Auto-Detect</button>
+            </div>
+            <div id="location-status" style="font-size:0.78rem;color:var(--green);margin-top:4px"></div>
+          </div>
+          <div class="form-group full">
+            <label>Upload Photo / Video</label>
+            <div class="detect-zone" id="rescue-upload-zone" onclick="document.getElementById('rescue-file').click()">
+              <div style="font-size:2rem;margin-bottom:0.5rem">📷</div>
+              <div style="font-weight:700;color:var(--muted)">Click to upload photo or video</div>
+              <div style="font-size:0.78rem;color:var(--muted);margin-top:4px">JPG, PNG, MP4 supported</div>
+              <input type="file" id="rescue-file" accept="image/*,video/*" style="display:none" onchange="handleRescueFile(this)"/>
+            </div>
+            <div id="rescue-file-name" style="font-size:0.8rem;color:var(--green);margin-top:4px"></div>
+          </div>
+          <div class="form-group full"><label>Additional Details</label><textarea id="er-desc" placeholder="Describe what you see — number of animals, immediate dangers..."></textarea></div>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-red" style="font-size:1rem;padding:13px 28px">🚨 SAVE AN ANIMAL →</button>
+          <span style="font-size:0.8rem;color:var(--muted)">Avg response: 20–30 min</span>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Rescue Tracking Timeline -->
+  <div id="rescue-tracking" style="display:none">
+    <div class="section-divider"><h3>Rescue Tracking</h3></div>
+    <div class="form-card">
+      <div class="fc-body">
+        <div class="timeline" id="rescue-timeline"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Rescues -->
+  <div class="listings-head">
+    <h3>Active Rescue Reports</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadRescues()">🔄 Refresh</button>
+  </div>
+  <div id="rescue-list" class="cards-list"></div>
+</div>
+
+<!-- ===== AMBULANCE ===== -->
+<div class="section-panel" id="panel-ambulance">
+  <div class="alert-banner alert-emergency">
+    🚑 Request an animal ambulance. Driver will be notified and ETA shown in real-time.
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon" style="background:var(--red)">🚑</div>
+      <div class="fc-head-text">
+        <h3>Request Animal Ambulance</h3>
+        <p>Nearest available ambulance dispatched to your location</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="amb-form" onsubmit="requestAmbulance(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Your Name *</label><input required type="text" id="am-name" placeholder="Full name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="am-phone" placeholder="10-digit" pattern="[0-9]{10}"/></div>
+          <div class="form-group full">
+            <label>Pickup Location *</label>
+            <div style="display:flex;gap:8px">
+              <input required type="text" id="am-location" placeholder="Your current location..." style="flex:1"/>
+              <button type="button" class="btn btn-amber btn-sm" onclick="detectLocationAmb()">📍 Detect</button>
+            </div>
+          </div>
+          <div class="form-group"><label>Destination Hospital</label>
+            <select id="am-hospital">
+              <option>City Animal Hospital</option>
+              <option>Prani Mitra Emergency Vet</option>
+              <option>Green Paws Animal Care</option>
+              <option>Nearest Available</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Animal Type</label>
+            <select id="am-animal">
+              <option>Dog</option><option>Cat</option><option>Cow</option><option>Bird</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-red">🚑 Request Ambulance Now →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Ambulance Status (mock) -->
+  <div id="amb-status" style="display:none">
+    <div class="section-divider"><h3>Ambulance Status</h3></div>
+    <div class="amb-card">
+      <div class="amb-icon">🚑</div>
+      <div class="amb-info" style="flex:1">
+        <h4>Ambulance #HC-04 — En Route</h4>
+        <div class="amb-meta">
+          <span>👨‍⚕️ Driver: Ramesh Kumar</span>
+          <span>📞 9876543210</span>
+          <span>🚗 Tata Ace — White</span>
+          <span>📍 2.3 km away</span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="eta-badge">⏱ ETA: ~8 minutes</span>
+          <span style="font-size:0.78rem;color:var(--muted)">Destination: City Animal Hospital</span>
+        </div>
+        <div style="margin-top:1rem">
+          <div style="background:var(--border);border-radius:50px;height:8px;overflow:hidden">
+            <div id="amb-progress" style="background:var(--red);height:100%;border-radius:50px;width:35%;transition:width 1s"></div>
+          </div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:4px">On the way to your location...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Available Ambulances -->
+  <div class="section-divider"><h3>Available Ambulances</h3></div>
+  <div id="amb-list"></div>
+</div>
+
+<!-- ===== VOLUNTEERS ===== -->
+<div class="section-panel" id="panel-volunteer">
+  <div class="alert-banner alert-info">
+    👨‍⚕️ Volunteers are dispatched nearest-first. Register below to join the rescue network.
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">👨‍⚕️</div>
+      <div class="fc-head-text">
+        <h3>Register as Rescue Volunteer</h3>
+        <p>Join our network — get notified for nearby animal emergencies</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="vol-form" onsubmit="submitVolunteer(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name *</label><input required type="text" id="vl-name" placeholder="Your name"/></div>
+          <div class="form-group"><label>Phone *</label><input required type="tel" id="vl-phone" placeholder="10-digit" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Location / Area *</label><input required type="text" id="vl-location" placeholder="Your area, city"/></div>
+          <div class="form-group"><label>Vehicle Type</label>
+            <select id="vl-vehicle">
+              <option>Two-wheeler (Bike/Scooter)</option>
+              <option>Four-wheeler (Car)</option>
+              <option>Auto-rickshaw</option>
+              <option>No vehicle — on foot</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Active Timings</label>
+            <select id="vl-timing">
+              <option>Morning (6 AM – 12 PM)</option>
+              <option>Afternoon (12 PM – 6 PM)</option>
+              <option>Evening (6 PM – 10 PM)</option>
+              <option>Night (10 PM – 6 AM)</option>
+              <option>Anytime — 24/7</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Availability Status</label>
+            <select id="vl-status">
+              <option value="Available">🟢 Available</option>
+              <option value="Busy">🟠 Busy</option>
+              <option value="Offline">⚫ Offline</option>
+            </select>
+          </div>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-amber">🙋 Register as Volunteer →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Volunteer Directory -->
+  <div class="listings-head">
+    <h3>Active Volunteers</h3>
+    <div style="display:flex;gap:6px">
+      <span class="pill active" onclick="setVolFilter('all',this)">All</span>
+      <span class="pill" onclick="setVolFilter('Available',this)">🟢 Available</span>
+      <span class="pill" onclick="setVolFilter('Busy',this)">🟠 Busy</span>
+      <span class="pill" onclick="setVolFilter('Offline',this)">⚫ Offline</span>
+    </div>
+  </div>
+  <div id="vol-list" class="cards-list"></div>
+</div>
+
+<!-- ===== AI SYMPTOM CHECKER ===== -->
+<div class="section-panel" id="panel-ai">
+  <div class="ai-card">
+    <h3>🤖 AI Symptom Checker</h3>
+    <p>Describe your pet's symptoms and get instant guidance on urgency, condition and first-aid.</p>
+    <div class="ai-input-row">
+      <input class="ai-input" id="ai-input" type="text" placeholder="e.g. Dog vomiting and not eating since morning..."/>
+      <button class="btn btn-amber" onclick="checkSymptoms()">🔍 Analyse</button>
+    </div>
+    <div class="ai-result" id="ai-result">
+      <div style="font-weight:700;color:#F0CC80;margin-bottom:0.5rem">🤖 AI Analysis Result</div>
+      <div class="ai-result-row">
+        <div class="ai-chip"><strong>Possible Condition</strong><span id="ai-condition">—</span></div>
+        <div class="ai-chip"><strong>Urgency Level</strong><span id="ai-urgency">—</span></div>
+        <div class="ai-chip"><strong>Recommended Specialist</strong><span id="ai-specialist">—</span></div>
+        <div class="ai-chip"><strong>First-Aid Advice</strong><span id="ai-firstaid">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick symptom chips -->
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">💊</div>
+      <div class="fc-head-text"><h3>Quick Symptom Select</h3><p>Tap a symptom for instant analysis</p></div>
+    </div>
+    <div class="fc-body">
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <button class="pill" onclick="quickSymptom('bleeding heavily')">🩸 Bleeding</button>
+        <button class="pill" onclick="quickSymptom('vomiting and not eating')">🤢 Vomiting</button>
+        <button class="pill" onclick="quickSymptom('fracture broken leg')">🦴 Fracture</button>
+        <button class="pill" onclick="quickSymptom('difficulty breathing')">😮‍💨 Breathing Issue</button>
+        <button class="pill" onclick="quickSymptom('unconscious not responding')">😵 Unconscious</button>
+        <button class="pill" onclick="quickSymptom('skin rash itching')">🔴 Skin Rash</button>
+        <button class="pill" onclick="quickSymptom('diarrhea loose stool')">💧 Diarrhea</button>
+        <button class="pill" onclick="quickSymptom('eye discharge swollen eye')">👁️ Eye Issue</button>
+        <button class="pill" onclick="quickSymptom('limping not walking')">🦵 Limping</button>
+        <button class="pill" onclick="quickSymptom('seizure convulsion')">⚡ Seizure</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ANIMAL DETECTION ===== -->
+<div class="section-panel" id="panel-detect">
+  <div class="alert-banner alert-info">
+    📸 Upload an animal photo to detect the species and get specialist recommendations.
+  </div>
+
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">📸</div>
+      <div class="fc-head-text">
+        <h3>Animal Detection from Image</h3>
+        <p>AI detects animal type and suggests nearest specialist (TensorFlow-ready)</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <div class="detect-zone" id="detect-zone" onclick="document.getElementById('detect-file').click()"
+        ondragover="event.preventDefault();this.classList.add('dragging')"
+        ondragleave="this.classList.remove('dragging')"
+        ondrop="handleDetectDrop(event)">
+        <div id="detect-preview" style="font-size:3rem;margin-bottom:0.5rem">🐾</div>
+        <div style="font-weight:700;color:var(--muted)" id="detect-label">Click or drag & drop an animal photo</div>
+        <div style="font-size:0.78rem;color:var(--muted);margin-top:4px">JPG, PNG supported • Max 10MB</div>
+        <input type="file" id="detect-file" accept="image/*" style="display:none" onchange="handleDetectFile(this)"/>
+      </div>
+      <div class="detect-result" id="detect-result">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:0.75rem">
+          <span id="detect-animal-icon" style="font-size:2rem">🐕</span>
+          <div>
+            <div style="font-weight:800;font-size:1rem;color:var(--text)" id="detect-animal-name">Dog Detected</div>
+            <div style="font-size:0.8rem;color:var(--muted)" id="detect-confidence">Confidence: 94%</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+          <div style="background:#fff;border-radius:10px;padding:0.75rem;border:1.5px solid var(--border)">
+            <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Recommended Specialist</div>
+            <div style="font-weight:700;color:var(--text)" id="detect-specialist">Small Animal Vet</div>
+          </div>
+          <div style="background:#fff;border-radius:10px;padding:0.75rem;border:1.5px solid var(--border)">
+            <div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Emergency Level</div>
+            <div style="font-weight:700" id="detect-emergency-level">Assess in person</div>
+          </div>
+        </div>
+        <button class="btn btn-amber" style="margin-top:1rem;width:100%;justify-content:center" onclick="showTab('booking',document.querySelector('.tab-card'))">📅 Book Appointment for this Animal →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MEDICAL RECORDS ===== -->
+<div class="section-panel" id="panel-records">
+  <div class="form-card">
+    <div class="fc-head">
+      <div class="fc-icon">🧾</div>
+      <div class="fc-head-text">
+        <h3>Create Pet Medical Record</h3>
+        <p>Store vaccination history, treatments, prescriptions and doctor notes</p>
+      </div>
+    </div>
+    <div class="fc-body">
+      <form id="record-form" onsubmit="submitRecord(event)">
+        <div class="form-grid">
+          <div class="form-group"><label>Pet Name *</label><input required type="text" id="rec-petname" placeholder="Pet's name"/></div>
+          <div class="form-group"><label>Age</label><input type="text" id="rec-age" placeholder="e.g. 2 years"/></div>
+          <div class="form-group"><label>Breed</label><input type="text" id="rec-breed" placeholder="e.g. Labrador"/></div>
+          <div class="form-group"><label>Owner Name *</label><input required type="text" id="rec-owner" placeholder="Your name"/></div>
+          <div class="form-group"><label>Owner Phone *</label><input required type="tel" id="rec-phone" placeholder="10-digit" pattern="[0-9]{10}"/></div>
+          <div class="form-group"><label>Allergies</label><input type="text" id="rec-allergies" placeholder="e.g. Penicillin, dust"/></div>
+          <div class="form-group full"><label>Vaccination History</label><textarea id="rec-vaccines" placeholder="e.g. Rabies — Jan 2024, Distemper — Mar 2024..."></textarea></div>
+          <div class="form-group full"><label>Previous Treatments</label><textarea id="rec-treatments" placeholder="e.g. Skin infection treated — Dr. Sharma, Feb 2024..."></textarea></div>
+          <div class="form-group full"><label>Current Medications / Prescriptions</label><textarea id="rec-meds" placeholder="e.g. Ivermectin 0.5ml weekly..."></textarea></div>
+          <div class="form-group full"><label>Doctor Notes</label><textarea id="rec-notes" placeholder="Any notes from the vet..."></textarea></div>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-amber">💾 Save Medical Record →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="listings-head">
+    <h3>Pet Medical Records</h3>
+    <button class="btn btn-outline btn-sm" onclick="loadRecords()">🔄 Refresh</button>
+  </div>
+  <div id="records-list"></div>
+</div>
+
+</main>
+
+<!-- Floating Emergency Button -->
+<button class="emergency-fab" onclick="showTab('emergency',document.querySelectorAll('.tab-card')[2])">
+  🚨 SAVE AN ANIMAL
+</button>
+
+<!-- Vet Booking Modal -->
+<div class="modal-overlay" id="vet-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="vet-modal-title">Book Appointment</h3>
+      <button class="modal-close" onclick="closeModal('vet-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-sub" id="vet-modal-sub"></p>
+      <div class="form-grid">
+        <div class="form-group"><label>Your Name *</label><input type="text" id="vm-name" placeholder="Full name"/></div>
+        <div class="form-group"><label>Phone *</label><input type="tel" id="vm-phone" placeholder="Contact"/></div>
+        <div class="form-group"><label>Pet Type</label>
+          <select id="vm-pet"><option>Dog</option><option>Cat</option><option>Bird</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label>Visit Reason</label>
+          <select id="vm-reason"><option>Check-up</option><option>Vaccination</option><option>Emergency</option><option>Surgery</option></select>
+        </div>
+        <div class="form-group"><label>Date</label><input type="date" id="vm-date"/></div>
+        <div class="form-group"><label>Time Slot</label>
+          <select id="vm-time"><option>9:00 AM</option><option>11:00 AM</option><option>2:00 PM</option><option>4:00 PM</option></select>
+        </div>
+      </div>
+      <button class="btn btn-amber" style="width:100%;margin-top:1.2rem;justify-content:center" onclick="confirmVetBooking()">Confirm Booking →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Record Detail Modal -->
+<div class="modal-overlay" id="record-modal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-head">
+      <h3 id="record-modal-title">Medical Record</h3>
+      <button class="modal-close" onclick="closeModal('record-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="record-modal-body"></div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+function gv(id){const el=$(id);return el?el.value:'';}
+function closeModal(id){$(id).classList.remove('open');}
+function openModal(id){$(id).classList.add('open');}
+function showNotif(msg,color){
+  const n=$('notif');n.innerHTML=msg;
+  n.style.borderLeftColor=color||'var(--amber)';
+  n.classList.add('show');clearTimeout(n._t);
+  n._t=setTimeout(()=>n.classList.remove('show'),4500);
+}
+function getStore(k){try{return JSON.parse(localStorage.getItem('hc_fv_'+k)||'[]');}catch(e){return[];}}
+function setStore(k,d){localStorage.setItem('hc_fv_'+k,JSON.stringify(d));}
+function addToStore(k,item){const d=getStore(k);d.unshift(item);setStore(k,d);}
+function fmtTime(ts){
+  const d=new Date(ts),now=new Date(),diff=(now-d)/1000;
+  if(diff<60)return 'just now';
+  if(diff<3600)return Math.floor(diff/60)+' min ago';
+  if(diff<86400)return Math.floor(diff/3600)+' hr ago';
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+}
+
+function showTab(name,btn){
+  document.querySelectorAll('.section-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-card').forEach(t=>t.classList.remove('active'));
+  $('panel-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:document.querySelector('.tabs-grid-container').offsetTop-68,behavior:'smooth'});
+  if(name==='map')initMap();
+  if(name==='booking'){loadAppointments();renderSlots();}
+  if(name==='volunteer'){loadVolunteers();seedVolunteers();}
+  if(name==='ambulance')renderAmbulances();
+  if(name==='records')loadRecords();
+  if(name==='emergency')loadRescues();
+}
+</script>
+
+<script>
+const VET_DATA=[
+  {id:1,name:'City Animal Hospital',type:'emergency',tags:['surgery','24h','emergency'],icon:'🏥',desc:'Full-service hospital with ICU, surgery theatre and diagnostic lab.',phone:'0651-111111',hours:'24 hours',dist:'0.8 km',rating:'4.9',lat:23.3441,lng:85.3096},
+  {id:2,name:'Dr. Sharma Veterinary Clinic',type:'private',tags:['private'],icon:'🩺',desc:'Experienced small animal clinic. Specialises in dogs and cats.',phone:'0651-222222',hours:'9 AM – 7 PM',dist:'1.4 km',rating:'4.7',lat:23.3500,lng:85.3150},
+  {id:3,name:'Govt. Veterinary Hospital',type:'govt',tags:['govt','low-cost'],icon:'🏛️',desc:'Government run. Free treatment for stray animals.',phone:'0651-333333',hours:'8 AM – 4 PM',dist:'2.1 km',rating:'4.2',lat:23.3380,lng:85.3200},
+  {id:4,name:'Green Paws Animal Care',type:'private',tags:['private','surgery'],icon:'🐾',desc:'Modern vet clinic with grooming, boarding and dental care.',phone:'0651-444444',hours:'9 AM – 8 PM',dist:'2.8 km',rating:'4.8',lat:23.3560,lng:85.3050},
+  {id:5,name:'Prani Mitra Emergency Vet',type:'emergency',tags:['24h','surgery','emergency'],icon:'🚑',desc:'24/7 emergency and critical care veterinary hospital.',phone:'0651-555555',hours:'24 hours',dist:'3.2 km',rating:'4.6',lat:23.3420,lng:85.3250},
+  {id:6,name:'Happy Pets Clinic',type:'private',tags:['private'],icon:'😺',desc:'Friendly neighbourhood clinic for cats and small animals.',phone:'0651-666666',hours:'10 AM – 6 PM',dist:'1.9 km',rating:'4.5',lat:23.3480,lng:85.3180},
+];
+function isOpenNow(h){if(h.includes('24'))return true;const hr=new Date().getHours();return hr>=9&&hr<19;}
+
+function renderSlots(){
+  $('slots-grid').innerHTML=VET_DATA.map(v=>`
+    <div class="vet-card" onclick="openVetModal(${v.id})">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.8rem">${v.icon}</span>
+        <div>
+          <h4>${v.name}</h4>
+          <span class="vet-tag">${v.tags.includes('emergency')?'Emergency':v.type==='govt'?'Government':'Private'}</span>
+          ${isOpenNow(v.hours)?'<span class="open-now">Open Now</span>':'<span class="closed-now">Closed</span>'}
+        </div>
+      </div>
+      <div class="vet-meta">
+        <span>📍 ${v.dist} away</span>
+        <span>🕐 ${v.hours}</span>
+        <span>⭐ ${v.rating}/5</span>
+        <span>📞 ${v.phone}</span>
+      </div>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem">${v.desc}</p>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-amber btn-sm" onclick="event.stopPropagation();openVetModal(${v.id})">📅 Book</button>
+        <a href="tel:${v.phone}" class="btn btn-success btn-sm" onclick="event.stopPropagation()">📞 Call</a>
+      </div>
+    </div>`).join('');
+}
+
+function openVetModal(id){
+  const v=VET_DATA.find(x=>x.id===id);if(!v)return;
+  $('vet-modal-title').textContent='Book at '+v.name;
+  $('vet-modal-sub').textContent=v.hours+' | '+v.phone+' | '+v.dist+' away';
+  openModal('vet-modal');
+}
+
+function confirmVetBooking(){
+  const name=gv('vm-name'),phone=gv('vm-phone');
+  if(!name||!phone){showNotif('⚠️ Enter name and phone.','#E67E22');return;}
+  const appt={id:'local_'+Date.now(),owner:name,phone,animalType:gv('vm-pet'),visitType:gv('vm-reason'),hospital:$('vet-modal-title').textContent.replace('Book at ',''),date:gv('vm-date'),time:gv('vm-time'),isEmergency:false,status:'Confirmed',ts:Date.now()};
+  addToStore('appts',appt);
+  saveToAPI('/api/vet/appointments',{owner:name,phone,animalType:gv('vm-pet'),visitType:gv('vm-reason'),hospital:appt.hospital,date:gv('vm-date'),time:gv('vm-time')});
+  closeModal('vet-modal');loadAppointments();
+  showNotif('✅ Appointment booked! We\'ll call you to confirm.','#0D7A55');
+}
+
+function submitBooking(e){
+  e.preventDefault();
+  const owner=gv('b-owner'),phone=gv('b-phone'),animal=gv('b-animal'),type=gv('b-type'),hospital=gv('b-hospital');
+  if(!owner||!phone||!animal||!type||!hospital){showNotif('⚠️ Fill all required fields.','#E67E22');return;}
+  const appt={id:'local_'+Date.now(),owner,phone,petName:gv('b-petname'),animalType:animal,visitType:type,hospital,date:gv('b-date'),time:gv('b-slot'),symptoms:gv('b-symptoms'),isEmergency:false,status:'Confirmed',ts:Date.now()};
+  addToStore('appts',appt);
+  saveToAPI('/api/vet/appointments',appt);
+  $('booking-form').reset();loadAppointments();
+  showNotif('✅ Appointment confirmed at '+hospital+'!','#0D7A55');
+}
+
+function submitEmergencyBooking(){
+  const owner=gv('b-owner'),phone=gv('b-phone'),hospital=gv('b-hospital');
+  if(!owner||!phone){showNotif('⚠️ Enter your name and phone first.','#E67E22');return;}
+  const appt={id:'local_'+Date.now(),owner,phone,animalType:gv('b-animal'),visitType:'Emergency Treatment',hospital:hospital||'Nearest Emergency Vet',date:gv('b-date'),time:'ASAP',isEmergency:true,status:'Emergency — Priority',ts:Date.now()};
+  addToStore('appts',appt);
+  saveToAPI('/api/vet/appointments',{...appt,isEmergency:true});
+  $('booking-form').reset();loadAppointments();
+  showNotif('🚨 Emergency booking confirmed! Vet alerted. Head to '+appt.hospital+' immediately.','#D0021B');
+}
+
+function loadAppointments(){
+  const data=getStore('appts');
+  const el=$('appt-list');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">📅</div><p>No appointments yet. Book one above.</p></div>';return;}
+  el.innerHTML=data.map(a=>`
+    <div class="listing-card">
+      <div class="lc-badge ${a.isEmergency?'badge-emergency':a.status==='Cancelled'?'badge-emergency':'badge-open'}">${a.status}</div>
+      <div class="lc-content">
+        <div class="lc-title">${a.owner}${a.petName?' ('+a.petName+')':''} — ${a.visitType}</div>
+        <div class="lc-meta">
+          <span>🏥 ${a.hospital}</span><span>🐾 ${a.animalType}</span>
+          ${a.date?`<span>📅 ${a.date}</span>`:''}
+          <span>⏰ ${a.time}</span><span>📞 ${a.phone}</span>
+          <span>🕐 ${fmtTime(a.ts)}</span>
+        </div>
+      </div>
+      <div class="lc-actions">
+        <button class="btn btn-danger btn-sm" onclick="cancelAppt('${a.id}')">✕ Cancel</button>
+        <button class="btn btn-danger btn-sm" onclick="delAppt('${a.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function cancelAppt(id){const d=getStore('appts');const i=d.findIndex(a=>a.id==id);if(i>-1){d[i].status='Cancelled';setStore('appts',d);loadAppointments();showNotif('Appointment cancelled.','#C0392B');}}
+function delAppt(id){setStore('appts',getStore('appts').filter(a=>a.id!=id));loadAppointments();}
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+let mapInstance=null,mapMarkers=[];
+const MAP_POINTS=[
+  {type:'emergency',name:'City Animal Hospital',lat:23.3441,lng:85.3096,icon:'🔴',phone:'0651-111111',hours:'24h'},
+  {type:'vet',name:'Dr. Sharma Clinic',lat:23.3500,lng:85.3150,icon:'🏥',phone:'0651-222222',hours:'9AM-7PM'},
+  {type:'ngo',name:'Paws & Care NGO',lat:23.3380,lng:85.3200,icon:'🟡',phone:'0651-771111',hours:'9AM-6PM'},
+  {type:'volunteer',name:'Rahul (Volunteer)',lat:23.3560,lng:85.3050,icon:'🟢',phone:'9876543210',hours:'Anytime'},
+  {type:'ambulance',name:'Ambulance HC-04',lat:23.3420,lng:85.3250,icon:'🔵',phone:'9876543211',hours:'24h'},
+  {type:'emergency',name:'Prani Mitra Emergency',lat:23.3460,lng:85.3180,icon:'🔴',phone:'0651-555555',hours:'24h'},
+];
+let mapFilter='all';
+
+function initMap(){
+  if(mapInstance)return;
+  const center=[23.3441,85.3096];
+  mapInstance=L.map('rescue-map').setView(center,14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(mapInstance);
+  renderMapMarkers();
+  // user location
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const {latitude:lat,longitude:lng}=pos.coords;
+      L.marker([lat,lng],{icon:L.divIcon({html:'📍',className:'',iconSize:[24,24]})})
+        .addTo(mapInstance).bindPopup('📍 Your Location').openPopup();
+      mapInstance.setView([lat,lng],14);
+    });
+  }
+}
+
+function renderMapMarkers(){
+  if(!mapInstance)return;
+  mapMarkers.forEach(m=>mapInstance.removeLayer(m));
+  mapMarkers=[];
+  const filtered=mapFilter==='all'?MAP_POINTS:MAP_POINTS.filter(p=>p.type===mapFilter||(mapFilter==='open'&&p.hours.includes('24'))||(mapFilter==='24h'&&p.hours.includes('24')));
+  filtered.forEach(p=>{
+    const m=L.marker([p.lat,p.lng],{icon:L.divIcon({html:`<div style="font-size:1.4rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))">${p.icon}</div>`,className:'',iconSize:[32,32]})})
+      .addTo(mapInstance)
+      .bindPopup(`<b>${p.name}</b><br>📞 ${p.phone}<br>🕐 ${p.hours}<br><a href="tel:${p.phone}" style="color:#F5A623;font-weight:700">Call Now</a>`);
+    mapMarkers.push(m);
+  });
+  renderMapCards(filtered);
+}
+
+function renderMapCards(points){
+  $('map-cards').innerHTML=points.map(p=>`
+    <div class="vet-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.8rem">${p.icon}</span>
+        <div><h4>${p.name}</h4><span class="vet-tag">${p.type.toUpperCase()}</span></div>
+      </div>
+      <div class="vet-meta"><span>📞 ${p.phone}</span><span>🕐 ${p.hours}</span></div>
+      <a href="tel:${p.phone}" class="btn btn-amber btn-sm" style="text-decoration:none">📞 Call</a>
+    </div>`).join('');
+}
+
+function setMapFilter(f,el){
+  mapFilter=f;
+  document.querySelectorAll('#map-filters .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderMapMarkers();
+}
+
+// EMERGENCY RESCUE
+function detectLocation(){
+  $('location-status').textContent='Detecting location...';
+  if(!navigator.geolocation){$('location-status').textContent='GPS not available.';return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const {latitude:lat,longitude:lng}=pos.coords;
+    $('er-location').value=`Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+    $('location-status').textContent='✅ Location detected!';
+  },()=>{$('location-status').textContent='Could not detect. Enter manually.';});
+}
+function detectLocationAmb(){
+  if(!navigator.geolocation)return;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    $('am-location').value=`Lat: ${pos.coords.latitude.toFixed(4)}, Lng: ${pos.coords.longitude.toFixed(4)}`;
+  });
+}
+function handleRescueFile(input){
+  if(input.files[0])$('rescue-file-name').textContent='✅ '+input.files[0].name+' attached';
+}
+
+function submitRescue(e){
+  e.preventDefault();
+  const name=gv('er-name'),phone=gv('er-phone'),condition=gv('er-condition'),location=gv('er-location');
+  if(!name||!phone||!condition||!location){showNotif('⚠️ Fill all required fields.','#E67E22');return;}
+  const report={id:'local_'+Date.now(),reporterName:name,phone,animalType:gv('er-animal'),injuryCondition:condition,locationText:location,desc:gv('er-desc'),status:'Reported',ts:Date.now()};
+  addToStore('rescues',report);
+  saveToAPI('/api/vet/rescue',report);
+  $('rescue-form').reset();$('rescue-file-name').textContent='';$('location-status').textContent='';
+  showRescueTimeline();loadRescues();
+  showNotif('🚨 Emergency reported! Nearest volunteer & vet notified. ETA 20–30 min.','#D0021B');
+}
+
+const TIMELINE_STAGES=[
+  {stage:'Reported',icon:'📋'},
+  {stage:'Volunteer Assigned',icon:'👨⚕️'},
+  {stage:'On The Way',icon:'🚗'},
+  {stage:'Animal Picked',icon:'🐾'},
+  {stage:'Reached Hospital',icon:'🏥'},
+  {stage:'Treatment Started',icon:'💉'},
+  {stage:'Recovered',icon:'✅'},
+];
+
+function showRescueTimeline(){
+  $('rescue-tracking').style.display='block';
+  $('rescue-timeline').innerHTML=TIMELINE_STAGES.map((s,i)=>`
+    <div class="tl-item">
+      <div class="tl-dot ${i===0?'done':i===1?'active':''}">${s.icon}</div>
+      <div class="tl-content">
+        <div class="tl-label">${s.stage}</div>
+        <div class="tl-time">${i===0?'Just now':i===1?'Assigning...':'Pending'}</div>
+      </div>
+    </div>`).join('');
+}
+
+function loadRescues(){
+  const data=getStore('rescues');
+  const el=$('rescue-list');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">🚨</div><p>No rescue reports yet.</p></div>';return;}
+  el.innerHTML=data.map(r=>`
+    <div class="listing-card">
+      <div class="lc-badge badge-emergency">${r.status}</div>
+      <div class="lc-content">
+        <div class="lc-title">${r.animalType} — ${r.injuryCondition}</div>
+        <div class="lc-meta"><span>📍 ${r.locationText}</span><span>👤 ${r.reporterName}</span><span>📞 ${r.phone}</span><span>🕐 ${fmtTime(r.ts)}</span></div>
+        ${r.desc?`<div style="font-size:0.82rem;color:var(--muted);margin-top:4px">${r.desc}</div>`:''}
+      </div>
+      <div class="lc-actions">
+        <button class="btn btn-success btn-sm" onclick="resolveRescue('${r.id}')">✓ Resolved</button>
+        <button class="btn btn-danger btn-sm" onclick="delRescue('${r.id}')">🗑</button>
+      </div>
+    </div>`).join('');
+}
+function resolveRescue(id){const d=getStore('rescues');const i=d.findIndex(r=>r.id==id);if(i>-1){d[i].status='Resolved';setStore('rescues',d);loadRescues();showNotif('✅ Rescue marked resolved!','#0D7A55');}}
+function delRescue(id){setStore('rescues',getStore('rescues').filter(r=>r.id!=id));loadRescues();}
+
+// AMBULANCE
+const AMB_DATA=[
+  {id:1,name:'Ambulance HC-01',driver:'Suresh Kumar',phone:'9876543210',vehicle:'Tata Ace — White',eta:'5 min',dist:'1.2 km',status:'Available'},
+  {id:2,name:'Ambulance HC-02',driver:'Mohan Singh',phone:'9876543211',vehicle:'Mahindra Bolero — Blue',eta:'12 min',dist:'3.1 km',status:'Available'},
+  {id:3,name:'Ambulance HC-03',driver:'Priya Devi',phone:'9876543212',vehicle:'Tata Ace — Yellow',eta:'18 min',dist:'4.5 km',status:'Busy'},
+];
+function renderAmbulances(){
+  $('amb-list').innerHTML=AMB_DATA.map(a=>`
+    <div class="amb-card">
+      <div class="amb-icon">🚑</div>
+      <div class="amb-info" style="flex:1">
+        <h4>${a.name} <span class="lc-badge ${a.status==='Available'?'badge-resolved':'badge-active'}" style="font-size:0.7rem">${a.status}</span></h4>
+        <div class="amb-meta">
+          <span>👨⚕️ ${a.driver}</span><span>📞 ${a.phone}</span>
+          <span>🚗 ${a.vehicle}</span><span>📍 ${a.dist} away</span>
+        </div>
+        <span class="eta-badge">⏱ ETA: ${a.eta}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <a href="tel:${a.phone}" class="btn btn-amber btn-sm">📞 Call</a>
+        ${a.status==='Available'?`<button class="btn btn-success btn-sm" onclick="dispatchAmb(${a.id})">🚑 Dispatch</button>`:''}
+      </div>
+    </div>`).join('');
+}
+function requestAmbulance(e){
+  e.preventDefault();
+  const name=gv('am-name'),phone=gv('am-phone'),loc=gv('am-location');
+  if(!name||!phone||!loc){showNotif('⚠️ Fill all fields.','#E67E22');return;}
+  $('amb-status').style.display='block';
+  $('amb-form').reset();
+  showNotif('🚑 Ambulance dispatched! Driver Ramesh Kumar is on the way. ETA ~8 min.','#D0021B');
+  let w=35;const iv=setInterval(()=>{w=Math.min(w+5,100);$('amb-progress').style.width=w+'%';if(w>=100)clearInterval(iv);},2000);
+}
+function dispatchAmb(id){showNotif('🚑 Ambulance #HC-0'+id+' dispatched to your location!','#D0021B');}
+</script>
+
+<script>
+// VOLUNTEERS
+let volFilter='all';
+function seedVolunteers(){
+  if(getStore('volunteers').length)return;
+  setStore('volunteers',[
+    {id:1,name:'Rahul Sharma',phone:'9876543210',location:'Lalpur, Ranchi',vehicleType:'Two-wheeler (Bike/Scooter)',activeTiming:'Anytime — 24/7',status:'Available',ts:Date.now()-3600000},
+    {id:2,name:'Priya Singh',phone:'9876543211',location:'Harmu, Ranchi',vehicleType:'Four-wheeler (Car)',activeTiming:'Morning (6 AM – 12 PM)',status:'Busy',ts:Date.now()-7200000},
+    {id:3,name:'Amit Kumar',phone:'9876543212',location:'Doranda, Ranchi',vehicleType:'Two-wheeler (Bike/Scooter)',activeTiming:'Evening (6 PM – 10 PM)',status:'Offline',ts:Date.now()-86400000},
+  ]);
+}
+function submitVolunteer(e){
+  e.preventDefault();
+  const name=gv('vl-name'),phone=gv('vl-phone'),location=gv('vl-location');
+  if(!name||!phone||!location){showNotif('⚠️ Fill required fields.','#E67E22');return;}
+  const vol={id:'local_'+Date.now(),name,phone,location,vehicleType:gv('vl-vehicle'),activeTiming:gv('vl-timing'),status:gv('vl-status'),ts:Date.now()};
+  addToStore('volunteers',vol);
+  saveToAPI('/api/vet/volunteers',vol);
+  $('vol-form').reset();loadVolunteers();
+  showNotif('✅ Registered as volunteer! You\'ll be notified for nearby rescues.','#0D7A55');
+}
+function setVolFilter(f,el){volFilter=f;document.querySelectorAll('#panel-volunteer .pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');loadVolunteers();}
+function loadVolunteers(){
+  seedVolunteers();
+  let data=getStore('volunteers');
+  if(volFilter!=='all')data=data.filter(v=>v.status===volFilter);
+  const el=$('vol-list');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">👨⚕️</div><p>No volunteers found.</p></div>';return;}
+  el.innerHTML=data.map(v=>`
+    <div class="listing-card">
+      <div class="lc-content">
+        <div class="lc-title">👤 ${v.name}
+          <span class="vol-status status-${v.status.toLowerCase()}" style="margin-left:8px">
+            ${v.status==='Available'?'🟢':v.status==='Busy'?'🟠':'⚫'} ${v.status}
+          </span>
+        </div>
+        <div class="lc-meta">
+          <span>📞 ${v.phone}</span><span>📍 ${v.location}</span>
+          <span>🚗 ${v.vehicleType}</span><span>⏰ ${v.activeTiming}</span>
+        </div>
+      </div>
+      <div class="lc-actions">
+        <a href="tel:${v.phone}" class="btn btn-amber btn-sm">📞 Call</a>
+        <button class="btn btn-success btn-sm" onclick="dispatchVol('${v.id}','${v.name}')">🚨 Dispatch</button>
+      </div>
+    </div>`).join('');
+}
+function dispatchVol(id,name){showNotif('✅ '+name+' notified for rescue dispatch!','#0D7A55');}
+
+// AI SYMPTOM CHECKER
+const AI_RULES=[
+  {keywords:['bleed','blood','wound','cut','hemorrhage'],condition:'Active Bleeding / Trauma',urgency:'🔴 EMERGENCY',specialist:'Emergency Vet / Surgeon',firstaid:'Apply gentle pressure with clean cloth. Do NOT remove embedded objects. Rush to emergency vet immediately.'},
+  {keywords:['fracture','broken','bone','limb','leg'],condition:'Suspected Fracture',urgency:'🔴 URGENT',specialist:'Orthopedic Vet / Surgeon',firstaid:'Immobilize the limb with a splint. Do not force movement. Transport carefully to vet.'},
+  {keywords:['breath','breathing','choke','gasp','wheeze','respiratory'],condition:'Respiratory Distress',urgency:'🔴 EMERGENCY',specialist:'Emergency Vet',firstaid:'Keep animal calm and still. Ensure airway is clear. Rush to emergency vet immediately.'},
+  {keywords:['unconscious','unresponsive','faint','collapse','coma'],condition:'Loss of Consciousness',urgency:'🔴 EMERGENCY',specialist:'Emergency Vet / ICU',firstaid:'Check for breathing. Keep warm. Do not give water. Rush to emergency vet.'},
+  {keywords:['seizure','convulsion','tremor','shaking','epilepsy'],condition:'Seizure / Neurological Issue',urgency:'🔴 URGENT',specialist:'Neurologist Vet',firstaid:'Clear area of hazards. Do not restrain. Time the seizure. Vet visit immediately after.'},
+  {keywords:['vomit','nausea','not eating','loss of appetite','regurgitate'],condition:'Gastrointestinal Issue',urgency:'🟡 MODERATE',specialist:'General Vet',firstaid:'Withhold food for 12 hours. Provide small amounts of water. Visit vet if persists over 24 hours.'},
+  {keywords:['diarrhea','loose stool','watery stool'],condition:'Gastrointestinal Infection',urgency:'🟡 MODERATE',specialist:'General Vet',firstaid:'Keep hydrated. Bland diet (boiled rice + chicken). Vet visit if blood in stool or lasts 2+ days.'},
+  {keywords:['rash','itch','scratch','skin','fur loss','mange'],condition:'Skin Condition / Allergy',urgency:'🟢 LOW',specialist:'Dermatology Vet',firstaid:'Prevent scratching. Avoid known allergens. Vet visit for diagnosis and treatment.'},
+  {keywords:['eye','discharge','swollen eye','cloudy','blind'],condition:'Eye Infection / Injury',urgency:'🟡 MODERATE',specialist:'Ophthalmology Vet',firstaid:'Do not rub the eye. Rinse gently with saline. Cover if injured. Vet visit within 24 hours.'},
+  {keywords:['limp','lame','not walking','paw','foot'],condition:'Limb / Paw Injury',urgency:'🟡 MODERATE',specialist:'Orthopedic Vet',firstaid:'Check for foreign objects. Do not force walking. Rest and vet visit within 24 hours.'},
+];
+
+function checkSymptoms(){
+  const input=gv('ai-input').toLowerCase().trim();
+  if(!input){showNotif('⚠️ Enter symptoms first.','#E67E22');return;}
+  let match=AI_RULES.find(r=>r.keywords.some(k=>input.includes(k)));
+  if(!match)match={condition:'General Health Concern',urgency:'🟢 LOW — Monitor',specialist:'General Vet',firstaid:'Monitor your pet closely. Ensure food, water and rest. Schedule a vet visit if symptoms persist or worsen.'};
+  $('ai-condition').textContent=match.condition;
+  $('ai-urgency').textContent=match.urgency;
+  $('ai-specialist').textContent=match.specialist;
+  $('ai-firstaid').textContent=match.firstaid;
+  $('ai-result').classList.add('show');
+}
+function quickSymptom(s){$('ai-input').value=s;checkSymptoms();}
+
+// ANIMAL DETECTION
+const DETECT_MAP={
+  dog:{icon:'🐕',name:'Dog Detected',specialist:'Small Animal Vet',emergency:'Assess in person',confidence:'91%'},
+  cat:{icon:'🐱',name:'Cat Detected',specialist:'Feline Specialist',emergency:'Assess in person',confidence:'89%'},
+  cow:{icon:'🐄',name:'Cow / Cattle Detected',specialist:'Large Animal Vet',emergency:'Assess in person',confidence:'87%'},
+  bird:{icon:'🐦',name:'Bird Detected',specialist:'Avian Vet',emergency:'Handle with care',confidence:'85%'},
+};
+function handleDetectFile(input){
+  if(!input.files[0])return;
+  const file=input.files[0];
+  const reader=new FileReader();
+  reader.onload=e=>{
+    $('detect-preview').innerHTML=`<img src="${e.target.result}" style="max-height:120px;border-radius:10px;object-fit:cover"/>`;
+    $('detect-label').textContent=file.name;
+  };
+  reader.readAsDataURL(file);
+  // Mock AI detection
+  setTimeout(()=>{
+    const animals=Object.keys(DETECT_MAP);
+    const detected=DETECT_MAP[animals[Math.floor(Math.random()*animals.length)]];
+    $('detect-animal-icon').textContent=detected.icon;
+    $('detect-animal-name').textContent=detected.name;
+    $('detect-confidence').textContent='Confidence: '+detected.confidence;
+    $('detect-specialist').textContent=detected.specialist;
+    $('detect-emergency-level').textContent=detected.emergency;
+    $('detect-result').classList.add('show');
+    showNotif('📸 Animal detected: '+detected.name,'#0D7A55');
+  },1200);
+}
+function handleDetectDrop(e){
+  e.preventDefault();$('detect-zone').classList.remove('dragging');
+  const file=e.dataTransfer.files[0];
+  if(file){const dt=new DataTransfer();dt.items.add(file);$('detect-file').files=dt.files;handleDetectFile($('detect-file'));}
+}
+
+// MEDICAL RECORDS
+function submitRecord(e){
+  e.preventDefault();
+  const petName=gv('rec-petname'),owner=gv('rec-owner'),phone=gv('rec-phone');
+  if(!petName||!owner||!phone){showNotif('⚠️ Fill required fields.','#E67E22');return;}
+  const rec={id:'local_'+Date.now(),petName,age:gv('rec-age'),breed:gv('rec-breed'),ownerName:owner,ownerPhone:phone,allergies:gv('rec-allergies'),vaccinations:gv('rec-vaccines'),treatments:gv('rec-treatments'),medications:gv('rec-meds'),doctorNotes:gv('rec-notes'),ts:Date.now()};
+  addToStore('records',rec);
+  saveToAPI('/api/vet/records',rec);
+  $('record-form').reset();loadRecords();
+  showNotif('✅ Medical record saved for '+petName+'!','#0D7A55');
+}
+function loadRecords(){
+  const data=getStore('records');
+  const el=$('records-list');
+  if(!data.length){el.innerHTML='<div class="empty-state"><div class="es-icon">🧾</div><p>No records yet. Create one above.</p></div>';return;}
+  el.innerHTML=data.map(r=>`
+    <div class="record-card">
+      <div class="record-head">
+        <h4>🐾 ${r.petName} ${r.breed?'('+r.breed+')':''}</h4>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-amber btn-sm" onclick="viewRecord('${r.id}')">👁 View</button>
+          <button class="btn btn-danger btn-sm" onclick="delRecord('${r.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="record-body">
+        <div class="lc-meta">
+          ${r.age?`<span>🎂 Age: ${r.age}</span>`:''}
+          <span>👤 ${r.ownerName}</span><span>📞 ${r.ownerPhone}</span>
+          <span>🕐 ${fmtTime(r.ts)}</span>
+        </div>
+        ${r.allergies?`<div style="margin-top:8px"><span class="record-tag">⚠️ Allergies: ${r.allergies}</span></div>`:''}
+      </div>
+    </div>`).join('');
+}
+function viewRecord(id){
+  const r=getStore('records').find(x=>x.id==id);if(!r)return;
+  $('record-modal-title').textContent='🐾 '+r.petName+' — Medical Record';
+  $('record-modal-body').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;font-size:0.88rem">
+      <div><strong>Pet Name:</strong> ${r.petName}</div>
+      <div><strong>Age:</strong> ${r.age||'—'}</div>
+      <div><strong>Breed:</strong> ${r.breed||'—'}</div>
+      <div><strong>Owner:</strong> ${r.ownerName}</div>
+      <div><strong>Phone:</strong> ${r.ownerPhone}</div>
+      <div><strong>Allergies:</strong> ${r.allergies||'None'}</div>
+    </div>
+    ${r.vaccinations?`<div class="record-section"><h5>💉 Vaccination History</h5><p style="font-size:0.85rem;color:var(--muted)">${r.vaccinations}</p></div>`:''}
+    ${r.treatments?`<div class="record-section"><h5>🩺 Previous Treatments</h5><p style="font-size:0.85rem;color:var(--muted)">${r.treatments}</p></div>`:''}
+    ${r.medications?`<div class="record-section"><h5>💊 Medications / Prescriptions</h5><p style="font-size:0.85rem;color:var(--muted)">${r.medications}</p></div>`:''}
+    ${r.doctorNotes?`<div class="record-section"><h5>📝 Doctor Notes</h5><p style="font-size:0.85rem;color:var(--muted)">${r.doctorNotes}</p></div>`:''}`;
+  openModal('record-modal');
+}
+function delRecord(id){if(!confirm('Delete this record?'))return;setStore('records',getStore('records').filter(r=>r.id!=id));loadRecords();}
+
+// API HELPER (saves to backend if available, silently fails)
+async function saveToAPI(url,data){
+  try{await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});}
+  catch(e){}
+}
+
+// INIT
+window.onload=()=>{renderSlots();loadAppointments();};
+</script>
+</body>
+</html>

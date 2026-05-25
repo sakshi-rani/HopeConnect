@@ -4,13 +4,13 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>HopeConnect — Helping Hands, Healing Hearts</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<nav>
-  <a href="/" class="logo">Hope<span>Connect</span></a>
+<nav id="navbar">
+  <a href="/" class="logo"><div class="logo-dot"></div>HopeConnect</a>
   <ul class="nav-links" id="navlinks">
     <li><a href="/" class="active">Home</a></li>
     <li><a href="/human">Human Help</a></li>
@@ -23,7 +23,7 @@
   </div>
 </nav>
 
-<div class="ebar" style="margin-top:68px">
+<div class="ebar">
   <div class="ebar-l"><div class="pulse-dot"></div><strong>24/7 Emergency Lines</strong> — Always here for you</div>
   <div class="ebar-nums">
     <a href="tel:112" class="enum">🚨 112 Emergency</a>
@@ -34,7 +34,9 @@
 </div>
 
 <section id="hero">
-  <div class="hero-mesh"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
     <div class="hero-badge"><div class="dot"></div>India's Community Help Network</div>
@@ -90,14 +92,14 @@
   </div>
 </section>
 
-<div id="about" style="padding:5rem 6%">
+<div id="about">
   <div class="about-text">
-    <div class="stag" style="background:rgba(27,79,191,0.1);color:var(--human)">About HopeConnect</div>
+    <div class="stag">About HopeConnect</div>
     <h2>Built for Every Person,<br>Every Animal in Need</h2>
     <p>HopeConnect is a community-driven platform that bridges the gap between those who need help and those who can provide it. From finding a shelter for the homeless to rescuing an injured stray — we make help accessible to all.</p>
     <p>Our network of verified NGOs, volunteers, hospitals and shelters ensures fast, reliable support 24 hours a day, 7 days a week across India.</p>
     <a href="/human" class="btn btn-gold" style="margin-right:0.75rem">Get Help Now</a>
-    <a href="#volunteer" class="btn" style="background:var(--border);color:var(--deep)">Volunteer</a>
+    <a href="#volunteer" class="btn btn-ghost">Volunteer</a>
     <div class="about-nums" style="margin-top:1.5rem">
       <div class="anum"><div class="anum-n">12K+</div><div class="anum-l">People helped this year</div></div>
       <div class="anum"><div class="anum-n">850+</div><div class="anum-l">Animals rescued</div></div>
@@ -127,7 +129,7 @@
     <input class="vol-inp" type="email" id="vol-email" placeholder="Enter your email address"/>
     <button class="btn btn-gold" onclick="registerVol()">Register Free →</button>
   </div>
-  <p style="color:rgba(255,255,255,0.25);font-size:0.78rem;margin-top:1rem;margin-bottom:0">340+ volunteers already registered • No experience required</p>
+  <p style="color:rgba(248,245,240,0.2);font-size:0.78rem;margin-top:1rem;margin-bottom:0;position:relative;z-index:1">340+ volunteers already registered • No experience required</p>
 </section>
 
 <footer>
@@ -139,5 +141,10 @@
 <div class="notif" id="notif"></div>
 
 <script src="/js/main.js"></script>
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);
+});
+</script>
 </body>
 </html>
