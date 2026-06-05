@@ -3,7 +3,7 @@
 function showNotif(msg, color) {
   const n = document.getElementById('notif');
   n.innerHTML = msg;
-  n.style.borderLeftColor = color || '#7B3B6F';
+  n.style.borderLeftColor = color || '#A36361';
   n.classList.add('show');
   clearTimeout(n._t);
   n._t = setTimeout(() => n.classList.remove('show'), 4500);
@@ -13,17 +13,17 @@ function showNotif(msg, color) {
 function registerVol() {
   const e = document.getElementById('vol-email');
   if (!e.value || !e.value.includes('@')) {
-    showNotif('⚠️ Please enter a valid email address.', '#D66A6A');
+    showNotif('Please enter a valid email address.', '#A36361');
     return;
   }
-  showNotif('✦ Welcome. Confirmation sent to <strong>' + e.value + '</strong>', '#7B3B6F');
+  showNotif('Welcome. Confirmation sent to <strong>' + e.value + '</strong>', '#9EABA2');
   e.value = '';
 }
 
 // ===== COUNTER ANIMATION =====
 function animCount() {
   document.querySelectorAll('[data-count]').forEach(el => {
-    const target = +el.dataset.count, dur = 2200;
+    const target = +el.dataset.count, dur = 2400;
     let start = null;
     function step(t) {
       if (!start) start = t;
@@ -47,30 +47,29 @@ function initReveal() {
   const style = document.createElement('style');
   style.textContent = `
     .reveal {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 1s ease, transform 1s ease;
     }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     .reveal-left {
-      opacity: 0; transform: translateX(-32px);
-      transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
+      opacity: 0; transform: translateX(-24px);
+      transition: opacity 1s ease, transform 1s ease;
     }
     .reveal-left.visible { opacity: 1; transform: translateX(0); }
     .reveal-right {
-      opacity: 0; transform: translateX(32px);
-      transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1), transform 0.9s cubic-bezier(0.4,0,0.2,1);
+      opacity: 0; transform: translateX(24px);
+      transition: opacity 1s ease, transform 1s ease;
     }
     .reveal-right.visible { opacity: 1; transform: translateX(0); }
     .reveal-scale {
-      opacity: 0; transform: scale(0.96) translateY(16px);
-      transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+      opacity: 0; transform: scale(0.97) translateY(14px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
     }
     .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
   `;
   document.head.appendChild(style);
 
-  document.querySelectorAll('.choose-head, .stag, #volunteer h2, #volunteer p, .vol-row').forEach(el => el.classList.add('reveal'));
+  document.querySelectorAll('.choose-head,.stag,#volunteer h2,#volunteer p,.vol-row').forEach(el => el.classList.add('reveal'));
   document.querySelectorAll('.about-text').forEach(el => el.classList.add('reveal-left'));
   document.querySelectorAll('.about-img').forEach(el => el.classList.add('reveal-right'));
   document.querySelectorAll('.big-card').forEach((el, i) => {
@@ -88,15 +87,11 @@ function initReveal() {
 
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        obs.unobserve(e.target);
-      }
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale')
-    .forEach(el => obs.observe(el));
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el => obs.observe(el));
 }
 
 // ===== STATS COUNTER TRIGGER =====
@@ -110,14 +105,14 @@ window.addEventListener('scroll', () => {
   if (nav) nav.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
 
-// ===== SUBTLE AMBIENT GLOW (replaces cursor glow) =====
+// ===== SOFT AMBIENT GLOW =====
 function initAmbientGlow() {
   const glow = document.createElement('div');
   glow.style.cssText = `
-    position:fixed;width:500px;height:500px;border-radius:50%;
-    background:radial-gradient(circle,rgba(123,59,111,0.04),transparent 70%);
+    position:fixed;width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle,rgba(163,99,97,0.03),transparent 70%);
     pointer-events:none;z-index:0;
-    transition:left 0.8s ease, top 0.8s ease;
+    transition:left 1.2s ease,top 1.2s ease;
     transform:translate(-50%,-50%);top:50%;left:50%;
   `;
   document.body.appendChild(glow);
