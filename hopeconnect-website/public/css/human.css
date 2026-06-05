@@ -16,13 +16,13 @@ html{scroll-behavior:smooth}
 body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;background:var(--amber);height:var(--nav-h);display:flex;align-items:center;padding:0 5%;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.12)}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;background:var(--amber);height:var(--nav-h);display:flex;align-items:center;padding:0 5%;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.12);gap:1rem}
 .logo{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#fff;text-decoration:none;text-shadow:1px 2px 0 rgba(0,0,0,0.15);display:flex;align-items:center;gap:8px}
 .logo-icon{font-size:1.8rem;animation:logoBounce 3s ease-in-out infinite;display:inline-block}
 @keyframes logoBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .nav-right{display:flex;align-items:center;gap:1rem}
-.nav-back{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.4);color:#fff;padding:6px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.2s}
-.nav-back:hover{background:rgba(255,255,255,0.35);transform:translateX(-2px)}
+.nav-back{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.4);color:#fff;padding:6px 16px;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap}
+.nav-back:hover{background:rgba(255,255,255,0.35);transform:translateX(-3px)}
 .nav-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.2);padding:6px 14px;border-radius:50px;border:1.5px solid rgba(255,255,255,0.35);transition:all 0.2s}
 .nav-search:focus-within{background:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.6)}
 .nav-search-icon{font-size:0.95rem;opacity:0.8}
