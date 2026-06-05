@@ -94,7 +94,7 @@ nav.scrolled{
   min-height:100vh;background:var(--bg);
   position:relative;overflow:hidden;
   display:flex;align-items:center;justify-content:center;
-  padding:140px 6% 80px;
+  padding:100px 6% 80px;
 }
 #hero::before{
   content:'';position:absolute;inset:0;
@@ -519,72 +519,7 @@ footer{
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== CINEMATIC EMOJI ANIMATIONS ===== */
-.cin-particle{
-  position:absolute;pointer-events:none;
-  font-size:1rem;line-height:1;
-  filter:blur(1.5px) grayscale(0.6);
-  opacity:0;z-index:1;
-  user-select:none;
-  will-change:transform,opacity;
-}
-.cin-sparkle{
-  animation:sparkleFloat var(--dur,12s) var(--delay,0s) ease-in-out infinite;
-  font-size:0.75rem;
-  filter:blur(1px) grayscale(0.5) brightness(0.7);
-}
-@keyframes sparkleFloat{
-  0%{opacity:0;transform:translateY(0) scale(0.8)}
-  15%{opacity:var(--op,0.18)}
-  50%{opacity:var(--op,0.18);transform:translateY(-60px) scale(1) translateX(var(--dx,10px))}
-  85%{opacity:var(--op,0.18)}
-  100%{opacity:0;transform:translateY(-120px) scale(0.7) translateX(var(--dx2,20px))}
-}
-.cin-leaf{
-  animation:leafDrift var(--dur,18s) var(--delay,0s) ease-in-out infinite;
-  font-size:0.85rem;
-  filter:blur(1.5px) grayscale(0.7) brightness(0.6);
-}
-@keyframes leafDrift{
-  0%{opacity:0;transform:translateY(-20px) rotate(0deg) translateX(0)}
-  10%{opacity:var(--op,0.12)}
-  50%{transform:translateY(45vh) rotate(180deg) translateX(var(--dx,40px))}
-  90%{opacity:var(--op,0.12)}
-  100%{opacity:0;transform:translateY(95vh) rotate(360deg) translateX(var(--dx2,80px))}
-}
-.cin-paw{
-  animation:pawAppear var(--dur,3s) var(--delay,0s) ease forwards;
-  font-size:0.9rem;
-  filter:blur(1px) grayscale(0.6) brightness(0.55);
-}
-@keyframes pawAppear{
-  0%{opacity:0;transform:scale(0.6)}
-  30%{opacity:var(--op,0.15);transform:scale(1)}
-  70%{opacity:var(--op,0.15)}
-  100%{opacity:0;transform:scale(0.8)}
-}
-.cin-footprint{
-  animation:footAppear var(--dur,3.5s) var(--delay,0s) ease forwards;
-  font-size:0.85rem;
-  filter:blur(1px) grayscale(0.5) brightness(0.5);
-}
-@keyframes footAppear{
-  0%{opacity:0;transform:scale(0.5) rotate(var(--rot,0deg))}
-  25%{opacity:var(--op,0.13);transform:scale(1) rotate(var(--rot,0deg))}
-  75%{opacity:var(--op,0.13)}
-  100%{opacity:0}
-}
-.cin-heart{
-  animation:heartPulse var(--dur,4s) var(--delay,0s) ease-in-out infinite;
-  font-size:1.4rem;
-  filter:blur(8px) grayscale(0.4) brightness(0.5);
-  opacity:0;
-}
-@keyframes heartPulse{
-  0%,100%{opacity:0;transform:scale(0.8)}
-  40%{opacity:var(--op,0.08);transform:scale(1.1)}
-  60%{opacity:var(--op,0.08);transform:scale(1)}
-}
+
 
 /* RESPONSIVE */
 @media(max-width:768px){
