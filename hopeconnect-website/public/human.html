@@ -4,8 +4,11 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Human Help — HopeConnect</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/css/human.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap"></noscript>
+<link rel="stylesheet" href="/css/human.css?v=3">
 </head>
 <body>
 
@@ -33,20 +36,27 @@
   </ul>
 </div>
 
+<style>
+.page-hero{position:relative;margin-top:68px;min-height:420px;display:flex;align-items:center;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;inset:0;background:url('https://res.cloudinary.com/deixioyzo/image/upload/v1780686026/ChatGPT_Image_Jun_6_2026_12_29_45_AM_okwgxu.png') center/cover no-repeat;z-index:0;}
+.page-hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.35);z-index:1;}
+.ph-inner{position:relative;z-index:2;max-width:860px;margin:0 auto;width:100%;padding:56px 5% 80px;display:flex;align-items:center;justify-content:center;text-align:center;}
+.ph-text{display:flex;flex-direction:column;align-items:center;gap:0.8rem;}
+.ph-inner h1{font-family:'Fredoka One',cursive;color:#fff;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.06;text-shadow:0 4px 20px rgba(0,0,0,0.4);margin:0;}
+.ph-inner p{color:rgba(255,255,255,0.95);font-size:clamp(0.95rem,1.8vw,1.1rem);line-height:1.65;max-width:500px;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,0.3);margin:0;}
+@media(max-width:768px){.page-hero{min-height:300px;}.ph-inner{padding:40px 5% 60px;}}
+</style>
 <div class="page-hero">
+
   <div class="ph-inner">
     <div class="ph-text">
-      <div class="ph-tag">Human Help</div>
       <h1>Support for<br>Every Person</h1>
       <p>From specially-abled individuals to those facing homelessness — we connect every person to the right resource, right when they need it.</p>
     </div>
-    <div class="ph-pets">
-      <span class="ph-pet">🤝</span>
-      <span class="ph-pet">🏠</span>
-      <span class="ph-pet">❤️</span>
-    </div>
   </div>
+
 </div>
+
 
 <div class="tabs-grid-container">
   <div class="tabs-grid" id="tabs-grid">

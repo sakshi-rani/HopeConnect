@@ -4,7 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>HopeConnect — Helping Hands, Healing Hearts</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<!-- Preconnect to speed up Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Preload hero image -->
+<link rel="preload" as="image" href="https://res.cloudinary.com/deixioyzo/image/upload/f_auto,q_auto,w_1600/v1780686026/ChatGPT_Image_Jun_6_2026_12_29_45_AM_okwgxu.png">
+<!-- Load fonts async (non-blocking) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"></noscript>
 <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -77,17 +84,22 @@
     </a>
     <a href="/animal" class="big-card bc-animal">
       <div class="bc-glow"></div>
-      <span class="bc-icon">🐾</span>
-      <div class="bc-title">Animal Help</div>
-      <div class="bc-desc">Dedicated care and rescue for animals in distress — because every creature deserves kindness.</div>
-      <ul class="bc-list">
-        <li>Veterinary hospital finder</li>
-        <li>Report injured / stray animals</li>
-        <li>Animal shelter & rescue network</li>
-        <li>Pet adoption platform</li>
-        <li>Lost & found pets</li>
-      </ul>
-      <div class="bc-btn bcb-animal">Explore Animal Help →</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:0.5rem">
+        <div style="flex:1">
+          <span class="bc-icon"><img src="https://res.cloudinary.com/deixioyzo/image/upload/f_auto,q_auto,w_220/v1780688482/ChatGPT_Image_Jun_6_2026_01_11_03_AM_cefm07.png" style="width:180px;height:180px;object-fit:contain" alt="Animal Help"/></span>
+          <div class="bc-title">Animal Help</div>
+          <div class="bc-desc">Dedicated care and rescue for animals in distress — because every creature deserves kindness.</div>
+          <ul class="bc-list">
+            <li>Veterinary hospital finder</li>
+            <li>Report injured / stray animals</li>
+            <li>Animal shelter & rescue network</li>
+            <li>Pet adoption platform</li>
+            <li>Lost & found pets</li>
+          </ul>
+          <div class="bc-btn bcb-animal">Explore Animal Help →</div>
+        </div>
+        <img src="https://res.cloudinary.com/deixioyzo/image/upload/f_auto,q_auto,w_220/v1780689674/ChatGPT_Image_Jun_6_2026_01_30_13_AM_x1m214.png" style="width:180px;height:180px;object-fit:contain;flex-shrink:0" alt="Cat"/>
+      </div>
     </a>
   </div>
 </section>
