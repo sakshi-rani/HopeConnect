@@ -3,7 +3,7 @@
 function showNotif(msg, color) {
   const n = document.getElementById('notif');
   n.innerHTML = msg;
-  n.style.borderLeftColor = color || '#A36361';
+  n.style.borderLeftColor = color || '#D96B5A';
   n.classList.add('show');
   clearTimeout(n._t);
   n._t = setTimeout(() => n.classList.remove('show'), 4500);
@@ -13,10 +13,10 @@ function showNotif(msg, color) {
 function registerVol() {
   const e = document.getElementById('vol-email');
   if (!e.value || !e.value.includes('@')) {
-    showNotif('Please enter a valid email address.', '#A36361');
+    showNotif('Please enter a valid email address.', '#D96B5A');
     return;
   }
-  showNotif('Welcome. Confirmation sent to <strong>' + e.value + '</strong>', '#9EABA2');
+  showNotif('Welcome! Confirmation sent to <strong>' + e.value + '</strong>', '#7A9E8E');
   e.value = '';
 }
 
@@ -110,7 +110,7 @@ function initAmbientGlow() {
   const glow = document.createElement('div');
   glow.style.cssText = `
     position:fixed;width:600px;height:600px;border-radius:50%;
-    background:radial-gradient(circle,rgba(163,99,97,0.03),transparent 70%);
+    background:radial-gradient(circle,rgba(217,107,90,0.04),transparent 70%);
     pointer-events:none;z-index:0;
     transition:left 1.2s ease,top 1.2s ease;
     transform:translate(-50%,-50%);top:50%;left:50%;
